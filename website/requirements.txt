@@ -1,0 +1,8 @@
+# pip install -r requirements.txt
+# python3 pip install -r requirements.txt
+Flask==1.1.1
+requests==2.22.0
+# google-cloud-datastore==1.9.0
+# google-auth==1.6.3
+# pymongo==3.9.0
+# pycryptodome 

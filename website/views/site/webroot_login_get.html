@@ -1,0 +1,69 @@
+{% extends "_layouts/_default.html" %}
+
+{% block title %} home {% endblock %} 
+
+{% block linktags %}
+<meta name="description" content="hci cloud" /> 
+{% endblock %}
+
+{% block content %}
+
+<main>
+    <div class="container">
+        <div class="columns">
+            <div class="column col-4"></div>
+          <div class="column col-4">
+
+            <h2>Login</h2>
+
+            <form enctype="application/x-www-form-urlencoded" method="POST">
+                <!-- form validation class: has-success -->
+                <div class="form-group has-success">
+                  <label class="form-label" for="input-email">Email</label>
+                  <input class="form-input" type="text" id="input-email" name="input_email" placeholder="email-address">
+                  <p class="form-input-hint">The name is invalid.</p>
+                </div>
+              
+                <!-- form validation class: is-success -->
+                <div class="form-group">
+                  <label class="form-label" for="input-password">Password</label>
+                  <input class="form-input is-success" type="password" id="input-password" name="input_password" placeholder="...">
+                  <p class="form-input-hint">The password is invalid.</p>
+                </div>
+              
+                <!-- form validation example for checkbox, radio and switch -->
+                <div class="form-group">
+                  <label class="form-checkbox is-error">
+                    <input type="checkbox">
+                    <i class="form-icon"></i> Remember me
+                  </label>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Login </button>
+                </div>
+
+              </form>
+        
+
+          </div>
+          <div class="column col-4"></div>
+        </div>
+    </div>
+
+
+
+</main>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script type="text/javascript">
+(function() {
+    "use strict";
+}());
+</script>
+
+{% endblock %}

@@ -1,0 +1,10 @@
+{
+    "application": {
+        "name"              : "hci-admin (secure web)",
+        "version"           : "0.0.1",
+        "version_date"      : "2020-12-03",
+        "auth_cookie_name"  : "auth_hci_secure_web",
+        "app_token"         : "hci_admin_token",
+        "page_size"         : "25"
+    }
+}

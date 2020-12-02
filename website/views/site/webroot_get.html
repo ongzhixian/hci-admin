@@ -1,0 +1,128 @@
+{% extends "_layouts/_default.html" %}
+
+{% block title %} home {% endblock %} 
+
+{% block linktags %}
+<meta name="description" content="hci cloud" /> 
+{% endblock %}
+
+{% block content %}
+
+{% if valid_app_token %}
+
+<!-- <nav class="breadcrumb">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="#">Settings</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="#">Change avatar</a>
+        </li>
+    </ul>
+</nav> -->
+
+<main>
+  
+    <h2>Home</h2>
+
+    <p>List of records</p>
+
+    <table class="table table-scroll table-striped table-hover">
+      <thead>
+        <tr>
+          <th>name</th>
+          <th>genre</th>
+          <th>release date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="active">
+          <td>The Shawshank Redemption</td>
+          <td>Crime, Drama</td>
+          <td>14 October 1994</td>
+        </tr>
+        <tr class="active">
+          <td>The Shawshank Redemption</td>
+          <td>Crime, Drama</td>
+          <td>14 October 1994</td>
+        </tr>
+        <tr class="active">
+          <td>The Shawshank Redemption</td>
+          <td>Crime, Drama</td>
+          <td>14 October 1994</td>
+        </tr>
+      </tbody>
+    </table>
+
+    
+
+    <!-- 
+    <div class="container">
+        <div class="columns">
+            <div class="column col-4"></div>
+          <div class="column col-4">
+            <p>some content here</p>
+          </div>
+          <div class="column col-4"></div>
+        </div>
+    </div> -->
+
+
+
+
+</main>
+
+{% else %}{# Display for unauthenticated users #}
+
+<div class="container">
+    <div class="columns">
+        <div class="column col-3"></div>
+
+        <div class="column col-6">
+            <div class="hero">
+                <div class="hero-body">
+
+                    <h1>HCI</h1>
+
+                    <h3>Computer logon (authorized users only)</h3>
+                  
+                    <p>
+                        This computer system is the property of Emptool.
+                        It is for authorized use only. By using this system, all users acknowledge notice of, 
+                        and agreement to comply with the published policy Acceptable User of Electronic Communication
+                        Services Agreement ("AUP"), available <a href="#"">here</a>
+                    </p>
+                
+                    <p>
+                        Unauthorized or improper use of this system may result in administrative disciplinary action, civil charges/criminal penalties and/or other sanctions as set forth in AUP.
+                        By continuing to use this system, you indicate you awareness and of concent to these terms and conditions of use.
+                    </p>
+
+                    <p>
+                        <a href="/login" class="btn btn-primary">Continue</a>
+                    </p>
+                    </div>
+            </div>
+
+        </div>
+        <div class="column col-3">&nbsp;</div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script type="text/javascript">
+(function() {
+    "use strict";
+}());
+</script>
+
+{% endblock %}

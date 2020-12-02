@@ -1,0 +1,37 @@
+runtime: python37
+
+# service: default # ZX: if no "service" attribute, default service name is "default"
+# ZX: Explicitly name service as zxsh
+# service: zxsh
+
+# The version does not seem to work well in yaml. 
+# It seems that it neeeds to be specify via gcloud deploy
+#version: 1-0-0
+
+handlers:
+
+- url: /.well-known
+  static_dir: wwwroot/.well-known
+
+- url: /css
+  static_dir: wwwroot/css
+
+- url: /fonts
+  static_dir: wwwroot/fonts
+
+- url: /images
+  static_dir: wwwroot/images
+
+- url: /scripts
+  static_dir: wwwroot/scripts
+
+  # This configures Google App Engine to serve the files in the app's static
+  # directory.
+# - url: /
+#   static_dir: wwwroot
+
+  # This handler routes all requests not caught above to your main app. It is
+  # required when static routes are defined, but can be omitted (along with
+  # the entire handlers section) when there are no static files defined.
+- url: /.*
+  script: auto

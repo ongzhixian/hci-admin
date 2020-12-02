@@ -1,0 +1,196 @@
+{% extends "_layouts/_default.html" %}
+
+{% block title %} home {% endblock %} 
+
+{% block linktags %}
+<meta name="description" content="hci cloud" /> 
+{% endblock %}
+
+{% block content %}
+
+{% if valid_app_token %}
+
+
+<header class="navbar">
+    <section class="navbar-section">
+        <div class="dropdown"><a class="btn btn-link dropdown-toggle" tabindex="0">Data <i class="icon icon-caret"></i></a>
+            <ul class="menu">
+              <li class="menu-item"><a href="#dropdowns1">Export</a></li>
+              <li class="menu-item"><a href="#dropdowns2">Import</a></li>
+              <!-- <li class="menu-item"><a href="#dropdowns2">Hipchat</a></li>
+              <li class="menu-item"><a href="#dropdowns3">Skype</a></li> -->
+            </ul>
+        </div>
+        <div class="dropdown"><a class="btn btn-link dropdown-toggle" tabindex="0">Applications <i class="icon icon-caret"></i></a>
+            <ul class="menu">
+              <li class="menu-item"><a href="#dropdowns1">Slack</a></li>
+              <li class="menu-item"><a href="#dropdowns2">Hipchat</a></li>
+              <li class="menu-item"><a href="#dropdowns3">Skype</a></li>
+            </ul>
+        </div>
+        <div class="dropdown"><a class="btn btn-link dropdown-toggle" tabindex="0">Administration <i class="icon icon-caret"></i></a>
+            <ul class="menu">
+              <li class="menu-item"><a href="#dropdowns1">User management</a></li>
+              <!-- <li class="menu-item"><a href="#dropdowns2">Hipchat</a></li>
+              <li class="menu-item"><a href="#dropdowns3">Skype</a></li> -->
+            </ul>
+        </div>
+        <a href="..." class="btn btn-link">Docs</a>
+        <a href="..." class="btn btn-link">GitHub</a>
+        <a href="..." class="btn btn-link">Patreon</a>
+
+    </section>
+    <section class="navbar-center">
+        <a href="..." class="navbar-brand mr-2">HCI</a>
+    </section>
+    <section class="navbar-section">
+        <div class="input-group input-inline">
+            <input class="form-input" type="text" placeholder="search">
+            <button class="btn btn-primary input-group-btn">Search</button>
+        </div>
+        <div class="dropdown"><a class="btn btn-link dropdown-toggle" tabindex="0">DummyUserName <i class="icon icon-caret"></i></a>
+            <ul class="menu">
+              <li class="menu-item"><a href="#dropdowns1">Log out</a></li>
+              <li class="menu-item"><a href="#dropdowns2">Change password</a></li>
+              <li class="menu-item"><a href="#dropdowns3">Skype</a></li>
+            </ul>
+        </div>
+    </section>
+</header>
+
+
+<nav class="breadcrumb">
+    <ul class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="#">Settings</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="#">Change avatar</a>
+        </li>
+    </ul>
+</nav>
+
+<main>
+    <p>asd oisud</p>
+
+    <div class="container">
+        <div class="columns">
+            <div class="column col-4"></div>
+          <div class="column col-4">
+
+            <h2>Login</h2>
+
+            <form>
+                <!-- form validation class: has-success -->
+                <div class="form-group has-success">
+                  <label class="form-label" for="input-example-1">Name</label>
+                  <input class="form-input" type="text" id="input-example-1" placeholder="...">
+                  <p class="form-input-hint">The name is invalid.</p>
+                </div>
+              
+                <!-- form validation class: is-success -->
+                <div class="form-group">
+                  <label class="form-label" for="input-example-1">Name</label>
+                  <input class="form-input is-success" type="text" id="input-example-1" placeholder="...">
+                  <p class="form-input-hint">The name is invalid.</p>
+                </div>
+              
+                <!-- form validation example for checkbox, radio and switch -->
+                <div class="form-group">
+                  <label class="form-checkbox is-error">
+                    <input type="checkbox">
+                    <i class="form-icon"></i> Remember me
+                  </label>
+                </div>
+              </form>
+        
+
+          </div>
+          <div class="column col-4"></div>
+        </div>
+    </div>
+
+
+    <table class="table table-scroll table-striped table-hover">
+        <thead>
+          <tr>
+            <th>name</th>
+            <th>genre</th>
+            <th>release date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="active">
+            <td>The Shawshank Redemption</td>
+            <td>Crime, Drama</td>
+            <td>14 October 1994</td>
+          </tr>
+          <tr class="active">
+            <td>The Shawshank Redemption</td>
+            <td>Crime, Drama</td>
+            <td>14 October 1994</td>
+          </tr>
+          <tr class="active">
+            <td>The Shawshank Redemption</td>
+            <td>Crime, Drama</td>
+            <td>14 October 1994</td>
+          </tr>
+        </tbody>
+      </table>
+
+</main>
+
+{% else %}{# Display for unauthenticated users #}
+
+<div class="container">
+    <div class="columns">
+        <div class="column col-3"></div>
+
+        <div class="column col-6">
+            <div class="hero">
+                <div class="hero-body">
+
+                    <h1>HCI</h1>
+
+                    <h3>Computer logon (authorized users only)</h3>
+                  
+                    <p>
+                        This computer system is the property of Emptool.
+                        It is for authorized use only. By using this system, all users acknowledge notice of, 
+                        and agreement to comply with the published policy Acceptable User of Electronic Communication
+                        Services Agreement ("AUP"), available <a href="#"">here</a>
+                    </p>
+                
+                    <p>
+                        Unauthorized or improper use of this system may result in administrative disciplinary action, civil charges/criminal penalties and/or other sanctions as set forth in AUP.
+                        By continuing to use this system, you indicate you awareness and of concent to these terms and conditions of use.
+                    </p>
+
+                    <p>
+                        <a href="/login" class="btn btn-primary">Continue</a>
+                    </p>
+                    </div>
+            </div>
+
+        </div>
+        <div class="column col-3">&nbsp;</div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script type="text/javascript">
+(function() {
+    "use strict";
+}());
+</script>
+
+{% endblock %}

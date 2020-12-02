@@ -1,0 +1,56 @@
+{% import "./_macros/_default.html" as macros %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{% block title %} Home {% endblock %} - new</title>
+
+    <!-- Resources that is not available on our website -->
+    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    {% if app_settings["IS_HOSTED"] %}
+    <!-- Use CDN -->
+    <link type="text/css" rel="stylesheet" href="/css/materialize/materialize.min.css"  media="screen,projection"/>
+    {% else %}
+    <!-- Use local copies -->
+    <link type="text/css" rel="stylesheet" href="/css/materialize/materialize.min.css"  media="screen,projection"/>
+    {% endif %}
+
+    <!-- CSS that is only available on our website-->
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/site.css" />
+    
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+    
+    {% block linktags %}{% endblock %}
+
+  </head>
+
+  <body>
+    <nav>
+      <div class="nav-wrapper">
+        <a href="#" class="brand-logo">hci-admin</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="sass.html">Sass</a></li>
+          <li><a href="badges.html">Components</a></li>
+          <li><a href="collapsible.html">JavaScript</a></li>
+        </ul>
+      </div>
+    </nav>
+        
+    
+    {# 
+    {{ macros.page_nav_header2(view_id, valid_app_token, username) }}
+    #}
+    
+    {% block content %}
+    <!-- Primary Page Layout
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    
+    {% endblock %}
+    <!-- End Document
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <script type="text/javascript" src="/js/materialize/materialize.min.js"></script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>
