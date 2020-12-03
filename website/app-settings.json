@@ -5,6 +5,7 @@
         "version_date"      : "2020-12-03",
         "auth_cookie_name"  : "auth_hci_secure_web",
         "app_token"         : "hci_admin_token",
-        "page_size"         : "25"
+        "page_size"         : "25",
+        "google_client_id"  : "795492660294-8tacspthfpt31tjvjueqfqb9gtpata97.apps.googleusercontent.com"
     }
 }

@@ -101,22 +101,22 @@ def require_authentication(fn):
     logging.info("In require_authentication(%s)" % str(fn))
     def wrapper(*args, **kwargs):
         app_token = request.cookies.get(app_settings['application']['app_token'])
+        
         if not app_token:
-            logging.info("asddddasdasda")
             logging.info(app_token)
             return redirect("/login?from={0}".format(request.path))
         
         # Else test app_token
         try:
             crypto_struct = {
-                'key' : app_settings['application']['aes_key_hex'],
-                'iv' : app_settings['application']['aes_iv_hex']
+                'key' : app_secrets['login']['aes_key_hex'],
+                'iv' : app_secrets['login']['aes_iv_hex']
             }
             plain_text = aes_decrypt_from_hex(crypto_struct, app_token)
             
             tokens = plain_text.split("|")
             expiry_date = datetime.strptime(tokens[2], "%Y%m%d")
-            if datetime.utcnow() <= expiry_date:
+            if datetime.utcnow() > expiry_date:
                 #expired
                 return redirect("/login?from={0}".format(request.path))
 
