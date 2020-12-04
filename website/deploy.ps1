@@ -1,1 +1,1 @@
-gcloud app deploy  --version=1-0-0 --quiet --no-promote
+gcloud app deploy --version=1 --quiet --no-promote
