@@ -37,8 +37,6 @@ def webroot_contact_get():
     view_model = get_model()
     return view(view_model)
 
-
-
 @app.route('/login')
 def webroot_login_get():
     logging.info("In webroot_login_get()")
@@ -101,6 +99,15 @@ def webroot_logout_get():
     resp.set_cookie(app_settings['application']['app_token'], '', expires=0)
     return resp
 
+
+@app.route('/void-cookies')
+def webroot_void_cookies_get():
+    logging.info("In webroot_void_cookies_get()")
+    resp = make_response('/')
+    resp.set_cookie(app_settings['application']['app_token'], '', expires=0)
+    return resp
+
+
 @app.route('/authorize', methods=['POST'])
 def webroot_authorize_post():
     logging.info("In webroot_authorize_post()")
@@ -150,9 +157,14 @@ def webroot_authorize_post():
 
         from urllib.parse import urlparse, parse_qs
         # parsed_url = urlparse(URL)
-        x = parse_qs(request.query_string.decode("UTF8"))        
+        
+        query_string = request.query_string.decode("UTF8")
 
-        resp = make_response(''.join(x['from']) )
+        if len(query_string) > 0:
+            x = parse_qs(request.query_string.decode("UTF8"))
+            resp = make_response(''.join(x['from']) )
+        else:
+            resp = make_response("/")
         resp.set_cookie(app_settings['application']['app_token'], cipher_text)
         return resp
     except ValueError:

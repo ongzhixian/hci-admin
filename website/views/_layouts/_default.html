@@ -52,16 +52,15 @@
           <li><a href="/contact">Contact</a></li>
           <!-- <li><a href="/pdf-splitter">PDF Splitter</a></li> -->
 
-          <li>
-            <a class="dropdown-trigger" data-target="pdfSplitter_Dropdown">PDF Splitter<i class="material-icons right">arrow_drop_down</i></a>
           
-          </li>
-
 
           {% if valid_app_token %}
-          <li><a href="/logout" onclick="signOut();">Sign out</a></li>
+          <li>
+            <a class="dropdown-trigger" data-target="pdfSplitter_Dropdown">PDF Splitter<i class="material-icons right">arrow_drop_down</i></a>
+          </li>
+          <li><a href="#" id="signOutButton">Sign out</a></li>
           {% else %}
-          <li><div class="g-signin2" data-onsuccess="onSignIn"></div></li>
+          <li><div class="g-signin2" data-onsuccess="signIn"></div></li>
           {% endif %}
         </ul>
       </div>
@@ -82,8 +81,82 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script type="text/javascript" src="/js/materialize/materialize.min.js"></script>
     <script>
-      function onSignIn(googleUser) {
+    const p = {
+        signOutButton : document.getElementById('signOutButton'),
+
+        send : {
+
+            authorize : function(id_token) {
+                var xhr = new XMLHttpRequest();
+                xhr.onload = function() {
+                    console.log('Signed in as: ' + xhr.responseText);
+                };
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        if (this.response.length > 0) {
+                            location.href = this.response;
+                        }
+                    }
+                };
+                xhr.open('POST', '/authorize' + window.location.search);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.send('idtoken=' + id_token);
+            },
+
+            signOutCookies : function() {
+                var xhr = new XMLHttpRequest();
+                xhr.onload = function() {
+                    console.log('Signed in as: ' + xhr.responseText);
+                };
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        if (this.response.length > 0) {
+                            location.href = this.response;
+                        }
+                    }
+                };
+                xhr.open('GET', '/void-cookies');
+                xhr.send();
+            }
+
+        },
+
+        documentReady : function() {
+            p.signOutButton ? p.signOutButton.addEventListener("click", p.signOut) : null;
+
+            gapi.load('auth2', function() {
+                gapi.auth2.init();
+            });
+
+            M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'), { 
+                'coverTrigger' : false 
+            });
+        },
+
+        signOut : function() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+                p.send.signOutCookies();
+            });
+        }
+
+    };
+
+    (function() {
+        if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
+            p.documentReady();
+        } else {
+            document.addEventListener("DOMContentLoaded", p.documentReady);
+        }
+    }());
+
+    function signIn(googleUser) {
+        
+        console.log("onSignIn_start");
+
         // Useful data for your client-side scripts:
+        var auth2 = gapi.auth2.getAuthInstance();
         var profile = googleUser.getBasicProfile();
         console.log("ID: " + profile.getId()); // Don't send this directly to your server!
         console.log('Full Name: ' + profile.getName());
@@ -91,48 +164,14 @@
         console.log('Family Name: ' + profile.getFamilyName());
         console.log("Image URL: " + profile.getImageUrl());
         console.log("Email: " + profile.getEmail());
+
         // The ID token you need to pass to your backend:
         var id_token = googleUser.getAuthResponse().id_token;
         console.log("ID Token: " + id_token);
 
-        var xhr = new XMLHttpRequest();
-        xhr.onload = function() {
-          console.log('Signed in as: ' + xhr.responseText);
-        };
-        xhr.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-              if (this.response.length > 0) {
-                location.href = this.response;
-              }
-          }
-        };
-        xhr.open('POST', '/authorize' + window.location.search);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        //xhr.send('idtoken=' + id_token);
-      }
-      
-      function signOut() {
-        var auth2 = gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-          console.log('User signed out.');
-        });
-      }
+        p.send.authorize(id_token);
 
-      function documentReady(){
-        // var elems = document.querySelectorAll('.dropdown-trigger');
-        // var instances = M.Dropdown.init(elems, null);
-        M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'), {
-          'coverTrigger' : false
-          });
-      };
-
-      if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
-        documentReady();
-      } else {
-        document.addEventListener("DOMContentLoaded", documentReady);
-      }
-
-
+    }
     </script>
     
     {% block scripts %}{% endblock %}
