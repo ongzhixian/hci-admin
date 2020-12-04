@@ -37,6 +37,14 @@ def webroot_contact_get():
     view_model = get_model()
     return view(view_model)
 
+@app.route('/pdf-splitter')
+def webroot_pdf_splitter_get():
+    logging.info("In webroot_pdf_splitter_get()")
+    view_model = get_model()
+    from modules.datastore import get_mongodb_client
+    client = get_mongodb_client()
+    return view(view_model)
+
 @app.route('/login')
 def webroot_login_get():
     logging.info("In webroot_login_get()")

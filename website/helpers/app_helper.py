@@ -33,6 +33,8 @@ def get_model(cookie_json=None):
     # Authentication cookie check
     logging.info("AAAAAA")
     app_token = request.cookies.get(app_settings['application']['app_token'])
+    # view_model["google_client_id"] = app_settings["application"]["google_client_id"]
+    context['google_client_id'] = app_settings["application"]["google_client_id"]
     logging.info(app_token)
     (is_token_valid, tokens) = is_valid_app_token(app_token)
     context['valid_app_token'] = is_token_valid
