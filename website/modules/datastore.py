@@ -4,6 +4,9 @@
 
 import logging
 from uuid import uuid4
+from bson.objectid import ObjectId
+from pymongo import MongoClient
+
 
 ################################################################################
 # Module variables
@@ -42,3 +45,30 @@ def add_user(account_id):
         users.append(user)
         return user_id
     return get_user_id(account_id)
+
+def get_mongodb_client():
+    client = MongoClient("mongodb+srv://USERNAME:PASSWORD@cluster0.vog3o.mongodb.net/hci?retryWrites=true&w=majority")
+    # post = client.db.message.find_one({'_id': ObjectId('5fc9c9752fca7731bb2f92ac')})
+    message = client['hci']['message'].find_one()
+    return client
+
+def add_message():
+    from datetime import datetime
+    message = {
+        "author": "Mike",
+        "text": "My first blog post!",
+        "tags": ["mongodb", "python", "pymongo"],
+        "date": datetime.utcnow()
+    }
+    c = get_mongodb_client()
+    messages = c['hci']['message']
+    message_id = messages.insert_one(message).inserted_id
+    return message
+
+
+def find_message():
+    c = get_mongodb_client()
+    messages = c['hci']['message']
+    message = messages.find_one({"author": "Mike"})
+    return message
+
