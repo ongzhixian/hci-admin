@@ -31,13 +31,33 @@
   </head>
 
   <body>
+    <!-- Dropdown Structure -->
+    <ul id="pdfSplitter_Dropdown" class="dropdown-content">
+      <li><a href="/pdf-splitter">Introduction</a></li>
+      <li><a href="/pdf-splitter/projects">Projects</a></li>
+      <!-- 
+      <li class="divider"></li>
+      <li><a href="/pdf-splitter/create-project">Create project</a></li>
+      <li><a href="/pdf-splitter/create-project">Download</a></li> 
+      -->
+      <li class="divider"></li>
+      <li><a href="/pdf-splitter/help">Help</a></li>
+    </ul>
+
     <nav>
       <div class="nav-wrapper">
         <a href="/" class="brand-logo">hci-admin</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
           <li><a href="/about">About</a></li>
           <li><a href="/contact">Contact</a></li>
-          <li><a href="/pdf-splitter">PDF Splitter</a></li>
+          <!-- <li><a href="/pdf-splitter">PDF Splitter</a></li> -->
+
+          <li>
+            <a class="dropdown-trigger" data-target="pdfSplitter_Dropdown">PDF Splitter<i class="material-icons right">arrow_drop_down</i></a>
+          
+          </li>
+
+
           {% if valid_app_token %}
           <li><a href="/logout" onclick="signOut();">Sign out</a></li>
           {% else %}
@@ -88,8 +108,7 @@
         };
         xhr.open('POST', '/authorize' + window.location.search);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send('idtoken=' + id_token);
-
+        //xhr.send('idtoken=' + id_token);
       }
       
       function signOut() {
@@ -98,6 +117,22 @@
           console.log('User signed out.');
         });
       }
+
+      function documentReady(){
+        // var elems = document.querySelectorAll('.dropdown-trigger');
+        // var instances = M.Dropdown.init(elems, null);
+        M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'), {
+          'coverTrigger' : false
+          });
+      };
+
+      if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
+        documentReady();
+      } else {
+        document.addEventListener("DOMContentLoaded", documentReady);
+      }
+
+
     </script>
     
     {% block scripts %}{% endblock %}
