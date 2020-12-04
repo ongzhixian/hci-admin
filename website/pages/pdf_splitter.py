@@ -18,6 +18,14 @@ from flask import request, make_response, redirect
 # Routes
 ################################################################################
 
+@app.route('/pdf-splitter')
+def webroot_pdf_splitter_get():
+    logging.info("In webroot_pdf_splitter_get()")
+    view_model = get_model()
+    from modules.datastore import get_mongodb_client
+    client = get_mongodb_client()
+    return view(view_model)
+
 @app.route('/pdf-splitter/projects')
 def pdf_splitter_projects_get():
     logging.info("In pdf_splitter_projects_get()")
@@ -29,6 +37,14 @@ def pdf_splitter_projects_get():
 @app.route('/pdf-splitter/create-project')
 def pdf_splitter_create_project_get():
     logging.info("In pdf_splitter_create_project_get()")
+    view_model = get_model()
+    from modules.datastore import get_mongodb_client
+    client = get_mongodb_client()
+    return view(view_model)
+
+@app.route('/pdf-splitter/project/<project_id>')
+def pdf_splitter_project_get(project_id = None):
+    logging.info("In pdf_splitter_project_get()")
     view_model = get_model()
     from modules.datastore import get_mongodb_client
     client = get_mongodb_client()

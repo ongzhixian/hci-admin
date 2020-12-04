@@ -1,0 +1,246 @@
+{% extends "_layouts/_default.html" %}
+
+{% block title %} MyProjectName - PDF Splitter {% endblock %} 
+
+{% block linktags %}
+<meta name="description" content="hci cloud" /> 
+{% endblock %}
+
+{% block content %}
+
+<main>
+
+    <nav class="breadcrumb-container">
+        <div class="nav-wrapper">
+          <div class="col s12">
+            <a href="#!" class="breadcrumb">PDF Splitter</a>
+            <a href="#!" class="breadcrumb">Projects</a>
+            <a href="#!" class="breadcrumb">MyProjectName</a>
+          </div>
+        </div>
+      </nav>
+
+    <h2>MyProjectName</h2>
+
+    <div class="row">
+
+      <div class="col s2">
+
+        <h3>Statistics</h3>
+        
+        <table>
+          <thead>
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+                
+            </tr>
+          </thead>
+
+          <tbody>
+
+            <tr>
+              <td>Filename</td>
+              <td>asd.pdf</td>
+            </tr>
+            <tr>
+              <td>File size</td>
+              <td>1.32 MB</td>
+            </tr>
+            <tr>
+              <td>Number of pages</td>
+              <td>64</td>
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
+
+      <div class="col s3 offset-s1">
+        <h3>File split method</h3>
+        <form action="#">
+          <p>
+            <label>
+              <input name="group1" type="radio" checked />
+              <span>Create a new file n pages</span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input name="group1" type="radio" />
+              <span>Create a new file on terminator. <br/>
+                New file will contain contents up to and including terminator.
+              </span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input class="with-gap" name="group1" type="radio"  />
+              <span>Create a new file on terminator. <br/>
+                New file will contain contents excluding terminator.
+              </span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input name="group1" type="radio" disabled="disabled" />
+              <span>Regex</span>
+            </label>
+          </p>
+        </form>
+      </div>
+
+      <div class="col s3">
+        <h3>Options</h3>
+        <form action="#">
+          <div class="row">
+            <div class="input-field col s6">
+              <input id="input_text" type="text" data-length="10">
+              <label for="input_text">Split after n page(s)</label>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-field col s6">
+              <input id="input_text" type="text" data-length="10">
+              <label for="input_text">Terminator text</label>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="col s2">
+        <h3>Actions</h3>
+
+        <p>
+          <a class="waves-effect waves-light btn" href="/pdf-splitter/save-changes">Save changes</a>
+          
+      </p>
+      <p>
+        <a class="waves-effect waves-light btn" href="/pdf-splitter/generate-results">Generate results</a>
+      </p>
+      </div>
+
+      <!-- <div class="col s4">
+            
+        <table>
+          <thead>
+            <tr>
+                <th>Title</th>
+                <th>Filename</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Alvin</td>
+              <td>Eclair</td>
+              <td>2020-12-04</td>
+              <td>
+                  <i class="material-icons">mode_edit</i>
+                  <i class="material-icons">file_download</i>
+              </td>
+            </tr>
+            <tr>
+              <td>Alan</td>
+              <td>Jellybean</td>
+              <td>2020-12-04</td>
+              <td>
+                  <i class="material-icons">mode_edit</i>
+                  <i class="material-icons">file_download</i>
+              </td>
+            </tr>
+            <tr>
+              <td>Jonathan</td>
+              <td>Lollipop</td>
+              <td>2020-12-04</td>
+              <td>
+                  <i class="material-icons">mode_edit</i>
+                  <i class="material-icons">file_download</i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div> -->
+
+      <!-- <div class="col s4">
+        
+        <table>
+          <thead>
+            <tr>
+                <th>Title</th>
+                <th>Filename</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>Alvin</td>
+              <td>Eclair</td>
+              <td>2020-12-04</td>
+              <td>
+                  <i class="material-icons">mode_edit</i>
+                  <i class="material-icons">file_download</i>
+              </td>
+            </tr>
+            <tr>
+              <td>Alan</td>
+              <td>Jellybean</td>
+              <td>2020-12-04</td>
+              <td>
+                  <i class="material-icons">mode_edit</i>
+                  <i class="material-icons">file_download</i>
+              </td>
+            </tr>
+            <tr>
+              <td>Jonathan</td>
+              <td>Lollipop</td>
+              <td>2020-12-04</td>
+              <td>
+                  <i class="material-icons">mode_edit</i>
+                  <i class="material-icons">file_download</i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div> -->
+
+    </div>
+
+
+    <p>
+        <a class="waves-effect waves-light btn" href="/pdf-splitter/save-changes">Save changes</a>
+        <a class="waves-effect waves-light btn" href="/pdf-splitter/generate-results">Generate results</a>
+    </p>
+
+
+
+    <form enctype="application/x-www-form-urlencoded" method="POST">
+
+    </form>
+
+
+</main>
+
+<footer>
+    
+</footer>
+{% endblock %}
+
+
+{% block scripts %}
+
+<script type="text/javascript">
+(function() {
+    "use strict";
+}());
+</script>
+
+{% endblock %}
