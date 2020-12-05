@@ -14,6 +14,12 @@ switch ($envType)
         break
     }
 
+    "cron" {
+        Write-Host "Deploying cron jobs to production"
+        & gcloud app deploy cron.yaml --quiet
+        break
+    }
+
     "clean" {
         Write-Host "Clean and remove deployment artifacts bucket"
         & gsutil rm -r gs://asia.artifacts.hci-admin.appspot.com
