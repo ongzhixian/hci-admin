@@ -2,6 +2,7 @@
 # Modules and functions import statements
 ################################################################################
 
+
 import logging
 import json
 import sys
@@ -10,6 +11,16 @@ from flask import Flask
 
 from jinja2 import Template, Environment, FileSystemLoader
 from os import getenv
+
+
+########################################
+# Jinja2 filter functions
+########################################
+
+def checked_filter(value, check_value=None):
+    if value == check_value:
+        return "checked"
+    return ""
 
 ################################################################################
 # Functions
@@ -36,6 +47,7 @@ def get_app_secrets():
 def setup_jinja2_env():
     logging.debug("In setup_jinja2_env()")
     env = Environment(loader = FileSystemLoader('./views'))
+    env.filters["checked"] = checked_filter
     return env
 
 ################################################################################
