@@ -29,9 +29,12 @@ def webroot_pdf_splitter_get():
 @app.route('/pdf-splitter/projects')
 def pdf_splitter_projects_get():
     logging.info("In pdf_splitter_projects_get()")
+    db = hci_db()
+    # ex = db.project_exist("PUBLIC", "asdasd")
+    projects = db.get_owned_projects('PUBLIC')
+
     view_model = get_model()
-    # from modules.datastore import get_mongodb_client
-    # client = get_mongodb_client()
+    view_model["projects"] = projects
     return view(view_model)
 
 @app.route('/pdf-splitter/create-project')
