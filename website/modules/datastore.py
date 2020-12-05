@@ -83,10 +83,23 @@ class hci_db():
         self.db = self.client['hci']
         logging.info("class=hci_db method=__init__ event=end")
 
+    def project_exist(self, owner, title):
+        projects = self.db['project']
+        doc_count = projects.count_documents({"owner": {"$in":[owner]}, "title": title } )
+        return project_exist > 0
+
     def find_project(self, owner, title):
         projects = self.db['project']
         project = projects.find_one({"owner": {"$in":[owner]}, "title": title } )
         return project
+
+    def get_owned_projects(self, owner):
+        projects = self.db['project']
+        cursor = projects.find({"owner": {"$in":[owner]} }, {"title": 1, "filename": 1, "upd_dt": 1})
+        owned_projects = []
+        for doc in cursor:
+            owned_projects.append(doc)
+        return owned_projects
         
     #'PUBLIC', project_title, project_file_name, project_file_bytes
     def add_project(self, owner, title, file_name=None, file_bytes=None, file_size=0):
