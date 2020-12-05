@@ -1,0 +1,4 @@
+cron:
+- description: "keepalive"
+  url: /api/datetime
+  schedule: every 45 minutes
