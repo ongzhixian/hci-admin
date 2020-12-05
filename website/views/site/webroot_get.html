@@ -25,53 +25,71 @@
 </nav> -->
 
 <main>
+
+  <div class="row">
+
+    <div class="col s7">
+
+      <h3>Your projects</h3>
+      
+      <table>
+        <thead>
+          <tr>
+              <th>Title</th>
+              <th>Type</th>
+              <th>Last updated</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            
+            <td><a href="#">asd1.pdf</a></td>
+            <td>PDF Splitter</td>
+            <td>2020-12-05</td>
+          </tr>
+          <tr>
+            <td><a href="#">asd2.pdf</a></td>
+            <td>PDF Splitter</td>
+            <td>2020-12-05</td>
+          </tr>
+          <tr>
+            <td><a href="#">asd3.pdf</a></td>
+            <td>PDF Splitter</td>
+            <td>2020-12-05</td>
+          </tr>
+
+        </tbody>
+      </table>
+
+    </div><!-- Your projects -->
+
+
+    <div class="col s4 offset-s1">
+      <h2>Updates</h2>
+
+      <dl class="news">
+        
+        <dt>2020-12-05 updates</dt>
+        <dd>
+          <ol>
+            <li>Fix bugs with regards to using Google web sign-in</li>
+            <li>Continue works on PDF Splitter</li>
+          </ol>
+        </dd>
   
-    <h2>Home</h2>
+        <dt>2020-12-04 updates</dt>
+        <dd>
+          <ol>
+            <li>Initial deployment to production environment</li>
+            <li>Add PDF Splitter module</li>
+          </ol>
+        </dd>
+      </dl>
+    </div><!-- Updates-->
 
-    <p>List of records</p>
-
-    <table class="table table-scroll table-striped table-hover">
-      <thead>
-        <tr>
-          <th>name</th>
-          <th>genre</th>
-          <th>release date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="active">
-          <td>The Shawshank Redemption</td>
-          <td>Crime, Drama</td>
-          <td>14 October 1994</td>
-        </tr>
-        <tr class="active">
-          <td>The Shawshank Redemption</td>
-          <td>Crime, Drama</td>
-          <td>14 October 1994</td>
-        </tr>
-        <tr class="active">
-          <td>The Shawshank Redemption</td>
-          <td>Crime, Drama</td>
-          <td>14 October 1994</td>
-        </tr>
-      </tbody>
-    </table>
-
-    
-
-    <!-- 
-    <div class="container">
-        <div class="columns">
-            <div class="column col-4"></div>
-          <div class="column col-4">
-            <p>some content here</p>
-          </div>
-          <div class="column col-4"></div>
-        </div>
-    </div> -->
-
-
-
+  </div>
 
 </main>
 
@@ -119,7 +137,6 @@
 
 
 {% block scripts %}
-
 <script type="text/javascript">
 (function() {
     "use strict";

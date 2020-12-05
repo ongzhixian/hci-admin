@@ -10,3 +10,10 @@ main, nav {
 .breadcrumb-container {
     margin-top: .678em;
 }
+
+dl.news dt {
+    font-weight: bold;
+}
+dl.news dd {
+    margin:0;
+}
