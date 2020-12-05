@@ -93,6 +93,11 @@ class hci_db():
         project = projects.find_one({"owner": {"$in":[owner]}, "title": title } )
         return project
 
+    def get_project_info(self, id):
+        projects = self.db['project']
+        project_info = projects.find_one({"_id": ObjectId(id)}, {"file_bytes": 0})
+        return project_info
+
     def get_owned_projects(self, owner):
         projects = self.db['project']
         cursor = projects.find({"owner": {"$in":[owner]} }, {"title": 1, "filename": 1, "upd_dt": 1})
@@ -100,6 +105,13 @@ class hci_db():
         for doc in cursor:
             owned_projects.append(doc)
         return owned_projects
+
+    def update_project(self, id, split_method, n_page, terminator_text):
+        projects = self.db['project']
+        newvalues = { "$set": { "split_method": split_method, "n_page": n_page, "terminator_text": terminator_text } }
+        projects.update_one({"_id": ObjectId(id)}, newvalues)
+        return True
+
         
     #'PUBLIC', project_title, project_file_name, project_file_bytes
     def add_project(self, owner, title, file_name=None, file_bytes=None, file_size=0):
