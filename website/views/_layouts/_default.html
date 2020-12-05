@@ -83,8 +83,13 @@
     const p = {
         signOutButton : document.getElementById('signOutButton'),
 
-        send : {
+        gapiLoaded : function() {
+            return new Promise(function(resolve, reject) {
+                ((typeof gapi) === "undefined") ? reject(false) : resolve(true);
+            });
+        },
 
+        send : {
             authorize : function(id_token) {
                 var xhr = new XMLHttpRequest();
                 xhr.onload = function() {
@@ -123,8 +128,11 @@
         documentReady : function() {
             p.signOutButton ? p.signOutButton.addEventListener("click", p.signOut) : null;
 
-            gapi.load('auth2', function() {
-                gapi.auth2.init();
+            p.gapiLoaded().then(function(libraryExists) {
+                if (libraryExists)
+                    gapi.load('auth2', function() {
+                        gapi.auth2.init();
+                    });
             });
 
             M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'), { 
@@ -138,6 +146,7 @@
                 console.log('User signed out.');
                 p.send.signOutCookies();
             });
+            
         }
 
     };
