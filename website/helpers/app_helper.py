@@ -31,7 +31,6 @@ def get_model(cookie_json=None):
     context['view_package'] = package_name
     context['view_id'] = "{0}.{1}".format(module_name, caller_name)
     # Authentication cookie check
-    logging.info("AAAAAA")
     app_token = request.cookies.get(app_settings['application']['app_token'])
     # view_model["google_client_id"] = app_settings["application"]["google_client_id"]
     context['google_client_id'] = app_settings["application"]["google_client_id"]
