@@ -24,11 +24,11 @@
     
 
     <div class="row">
-      <form class="col s12" action="#" enctype="application/x-www-form-urlencoded" method="POST">
+      <form class="col s12" enctype="multipart/form-data" method="POST">
         
         <div class="row">
           <div class="input-field col s6">
-            <input id="input_text" type="text" data-length="10">
+            <input id="input_text" type="text" data-length="64" name="project_title" value="{{project_title}}">
             <label for="input_text">Project title</label>
           </div>
         </div>
@@ -36,7 +36,7 @@
         <div class="file-field input-field">
           <div class="btn">
             <span>File</span>
-            <input type="file">
+            <input type="file" name="project_file">
           </div>
           <div class="file-path-wrapper">
             <input class="file-path validate" type="text">
@@ -44,7 +44,10 @@
         </div>
         
         <p>
-          <a class="waves-effect waves-light btn" title="Save project and continue">Save project</a>
+          <button class="btn waves-effect waves-light" type="submit" name="action" value="save_project" title="Save project and continue">Save project
+            <i class="material-icons right">save</i>
+          </button>
+          {{error}}
         </p>
       </form>
     </div>
