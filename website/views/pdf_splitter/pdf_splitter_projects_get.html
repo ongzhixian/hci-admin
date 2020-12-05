@@ -37,60 +37,28 @@
         </thead>
 
         <tbody>
-          <tr>
-            <td>Alvin</td>
-            <td>Eclair</td>
-            <td>2020-12-04</td>
-            <td>
-                <i class="material-icons">mode_edit</i>
-                <i class="material-icons">file_download</i>
-            </td>
-          </tr>
-          <tr>
-            <td>Alan</td>
-            <td>Jellybean</td>
-            <td>2020-12-04</td>
-            <td>
-                <i class="material-icons">mode_edit</i>
-                <i class="material-icons">file_download</i>
-            </td>
-          </tr>
-          <tr>
-            <td>Jonathan</td>
-            <td>Lollipop</td>
-            <td>2020-12-04</td>
-            <td>
-                <i class="material-icons">mode_edit</i>
-                <i class="material-icons">file_download</i>
-            </td>
-          </tr>
+          
+          {% for project in projects %}
+              <tr>
+                <td>{{project.title}}</td>
+                <td>{{project.filename}}</td>
+                <td>{{project.upd_dt}}</td>
+                <td>
+                    <a href="/pdf-splitter/project/{{project._id}}" title="Edit"><i class="material-icons">mode_edit</i></a>
+                    <a href="/pdf-splitter/project/{{project._id}}" title="Download"><i class="material-icons">file_download</i></a>
+                    <!-- <i class="material-icons">file_download</i> -->
+                </td>
+              </tr>
+          {% endfor %}
+
         </tbody>
       </table>
 
     <p>
         <a class="waves-effect waves-light btn" href="/pdf-splitter/create-project">Create new project</a>
     </p>
-
-    <!-- <h3>What is it?</h3> -->
-
-    <!-- <p>This is a tool that helps to split a PDF file into separate pages.</p>
-
-    <h3>Instructions</h3>
     
-    <p>Please read the following instructions to understand how the pdf-splitter works.</p>
-
-    <ol>
-        <li>Create a project</li>
-        <li>Upload PDF file</li>
-        <li>Configure split options</li>
-        <li>Preview</li>
-        <li>Download results</li>
-    </ol> -->
-
-    <form enctype="application/x-www-form-urlencoded" method="POST">
-
-    </form>
-
+    <form enctype="application/x-www-form-urlencoded" method="POST"></form>
 
 </main>
 
