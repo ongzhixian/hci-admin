@@ -17,7 +17,7 @@
 .gitattributes
 
 # ZX:
-app-secrets.json
+
 app-credentials.json
 ako.py
 GOOGLE_APPLICATION_CREDENTIALS.json
