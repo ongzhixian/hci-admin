@@ -8,7 +8,7 @@
     <meta name="google-signin-client_id" content="{{google_client_id}}">
 
 
-    <title>{% block title %} Home {% endblock %} - new</title>
+    <title>{% block title %} Home {% endblock %} - hci-admin</title>
 
     <!-- Resources that is not available on our website -->
     <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -133,6 +133,8 @@
                     gapi.load('auth2', function() {
                         gapi.auth2.init();
                     });
+            }).catch(function(reason) {
+                console.log(reason);
             });
 
             M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'), { 
