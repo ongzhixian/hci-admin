@@ -43,7 +43,7 @@
 
             <tr>
               <td>Filename</td>
-              <td>{{project.filename}}</td>
+              <td><a href="/pdf-splitter/source-pdf-file/{{project._id}}" title="Download file">{{project.filename}}</a></td>
             </tr>
             <tr>
               <td>File size</td>
@@ -142,14 +142,18 @@
     </div><!-- row 2 -->
 
     <div class="row">
-      <div class="col s4">
+      <div class="col s6">
         
         <button class="btn waves-effect waves-light" type="submit" name="action" value="save_project" title="Save project and continue">Save project
           <i class="material-icons right">save</i>
         </button>
 
-        <button class="btn waves-effect waves-light" type="submit" name="action" value="download" title="Download PDF file">Save project
+        <button class="btn waves-effect waves-light" type="submit" name="action" value="download" title="Download PDF file">Download PDF
           <i class="material-icons right">file_download</i>
+        </button>
+
+        <button class="btn waves-effect waves-light" type="submit" name="action" value="test" title="Test function">Test function
+          <i class="material-icons right">new_releases</i>
         </button>
 
         <!-- <h3>Actions</h3> -->
@@ -176,7 +180,7 @@
       {{project}}
     </p>
 
-    <form enctype="application/x-www-form-urlencoded" method="POST"></form>
+    <form action="/pdf-splitter/" enctype="application/x-www-form-urlencoded" method="POST"></form>
 
 </main>
 

@@ -5,6 +5,7 @@
 import logging
 
 from datetime import datetime, timedelta
+from io import BytesIO
 
 from helpers.app_runtime import app, app_settings, app_secrets
 from helpers.app_helper import view, get_model, require_authentication
@@ -13,7 +14,9 @@ from modules.security import aes_encrypt_as_hex
 from modules.datastore import account_id_exists, add_user
 from modules.datastore import hci_db
 
-from flask import request, make_response, redirect
+from flask import request, make_response, redirect, send_file
+
+from PyPDF2 import PdfFileWriter, PdfFileReader
 
 ################################################################################
 # Routes
@@ -76,7 +79,60 @@ def pdf_splitter_create_project_post():
 @app.route('/pdf-splitter/project/<project_id>')
 def pdf_splitter_project_get(project_id = None):
     logging.info("In pdf_splitter_project_get()")
+    
+    db = hci_db()
+    project = db.get_project_info(project_id)
     view_model = get_model()
-    # from modules.datastore import get_mongodb_client
-    # client = get_mongodb_client()
+    view_model["project"] = project
     return view(view_model)
+
+
+@app.route('/pdf-splitter/source-pdf-file/<project_id>')
+def pdf_splitter_source_pdf_file_get(project_id = None):
+    db = hci_db()
+    (filename, filebytes) = db.get_file(project_id)
+    return send_file(
+        BytesIO(filebytes),
+        as_attachment=True,
+        attachment_filename=filename,
+        mimetype='application/octet-stream'
+    )
+
+
+@app.route('/pdf-splitter/project/<project_id>', methods=['POST'])
+def pdf_splitter_project_post(project_id = None):
+    logging.info("In pdf_splitter_project_post()")
+
+    n_page          = request.form['input_n_page']
+    terminator_text = request.form['input_terminator_text']
+    split_method    = request.form['radio_split_method']
+    action          = request.form['action']
+
+    db = hci_db()
+
+    if action == "download":
+        (filename, filebytes) = db.get_file(project_id)
+        return send_file(
+            BytesIO(filebytes),
+            as_attachment=True,
+            attachment_filename=filename,
+            mimetype='application/octet-stream'
+        )
+
+    if action == "test":
+        (filename, filebytes) = db.get_file(project_id)
+        with BytesIO(filebytes) as pdf_file_stream:
+            pdf_file = PdfFileReader(pdf_file_stream)
+            return "Number of pages {0}".format(pdf_file.getNumPages())
+
+    if action == "save_project":
+        db.update_project(project_id, split_method, n_page, terminator_text)
+
+    project = db.get_project_info(project_id)
+    view_model = get_model()
+    view_model["project"] = project
+    view_model["message"] = "Saved"
+    return view(view_model, view_path="pdf_splitter/pdf_splitter_project_get.html")
+
+
+

@@ -112,6 +112,11 @@ class hci_db():
         projects.update_one({"_id": ObjectId(id)}, newvalues)
         return True
 
+    def get_file(self, id):
+        projects = self.db['project']
+        project_file = projects.find_one({"_id": ObjectId(id)}, {"filename" : 1, "file_bytes": 1})
+        return (project_file['filename'], project_file['file_bytes'])
+
         
     #'PUBLIC', project_title, project_file_name, project_file_bytes
     def add_project(self, owner, title, file_name=None, file_bytes=None, file_size=0):
