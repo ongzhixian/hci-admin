@@ -4,9 +4,11 @@
 
 import logging
 from uuid import uuid4
+
 from bson.objectid import ObjectId
 from pymongo import MongoClient
 
+from helpers.app_runtime import app, app_settings, app_secrets
 
 ################################################################################
 # Module variables
@@ -46,11 +48,8 @@ def add_user(account_id):
         return user_id
     return get_user_id(account_id)
 
-def get_mongodb_client():
-    client = MongoClient("mongodb+srv://USERNAME:PASSWORD@cluster0.vog3o.mongodb.net/hci?retryWrites=true&w=majority")
-    # post = client.db.message.find_one({'_id': ObjectId('5fc9c9752fca7731bb2f92ac')})
-    message = client['hci']['message'].find_one()
-    return client
+def get_mongodb_client(database_name):
+    return MongoClient(app_secrets["mongodb"][database_name])
 
 def add_message():
     from datetime import datetime
@@ -72,3 +71,8 @@ def find_message():
     message = messages.find_one({"author": "Mike"})
     return message
 
+class hci_db():
+    def __init__(self):
+        self.client = get_mongodb_client('hci')
+        
+    
