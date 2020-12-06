@@ -77,15 +77,35 @@
     {% endblock %}
     <!-- End Document
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    
+    
     <script type="text/javascript" src="/js/materialize/materialize.min.js"></script>
     <script>
     const p = {
         signOutButton : document.getElementById('signOutButton'),
 
-        gapiLoaded : function() {
+        gapiAuthLoaded : function(func) {
             return new Promise(function(resolve, reject) {
-                ((typeof gapi) === "undefined") ? reject(false) : resolve(true);
+                if (((typeof gapi) === "undefined") || (!gapi))
+                    reject("No gapi");
+                
+                if (gapi.auth2 === undefined) {
+                    gapi.load('auth2', function() {
+                        gapi.auth2.init().then(resolve());
+                    });
+                } else {
+                    resolve();
+                }
+            });
+        },
+
+        signOut : function() {
+            p.gapiAuthLoaded().then(function() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                    console.log('User signed out.');
+                    p.send.signOutCookies();
+                });        
             });
         },
 
@@ -128,35 +148,32 @@
         documentReady : function() {
             p.signOutButton ? p.signOutButton.addEventListener("click", p.signOut) : null;
 
-            p.gapiLoaded().then(function(libraryExists) {
-                if (libraryExists)
-                    gapi.load('auth2', function() {
-                        gapi.auth2.init();
-                    });
-            }).catch(function(reason) {
-                console.log(reason);
-            });
+
 
             M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'), { 
                 'coverTrigger' : false 
             });
         },
 
-        signOut : function() {
+        asignOut : function() {
             if (gapi.auth2 === undefined) {
                 gapi.load('auth2', function() {
-                    gapi.auth2.init();
+                    gapi.auth2.init().then(function() {
+                        var auth2 = gapi.auth2.getAuthInstance();
+                        auth2.signOut().then(function () {
+                            console.log('User signed out.');
+                            p.send.signOutCookies();
+                        });
+                    })
+                });
+            } else {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                    console.log('User signed out.');
+                    p.send.signOutCookies();
                 });
             }
-
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-                console.log('User signed out.');
-                p.send.signOutCookies();
-            });
-            
         }
-
     };
 
     (function() {
@@ -166,6 +183,12 @@
             document.addEventListener("DOMContentLoaded", p.documentReady);
         }
     }());
+
+    function initGapi() {
+        gapi.load('auth2', function() {
+            gapi.auth2.init();
+        });
+    }
 
     function signIn(googleUser) {
         
@@ -191,5 +214,6 @@
     </script>
     
     {% block scripts %}{% endblock %}
+    <script src="https://apis.google.com/js/platform.js?onload=initGapi" async defer></script>
   </body>
 </html>
