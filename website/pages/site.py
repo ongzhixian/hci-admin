@@ -10,7 +10,7 @@ from helpers.app_runtime import app, app_settings, app_secrets
 from helpers.app_helper import view, get_model, require_authentication
 
 from modules.security import aes_encrypt_as_hex
-from modules.datastore import account_id_exists, add_user
+from modules.datastore import account_id_exists, add_user, hci_db
 
 from flask import request, make_response, redirect
 
@@ -130,19 +130,19 @@ def webroot_authorize_post():
         #     raise ValueError('Could not verify audience.')
 
         # ID token is valid. Get the user's Google Account ID from the decoded token.
-        account_id = id_info['sub']
+        # account_id = id_info['sub'] # Not using this anymore; using email
 
         # TODO:
         # If the user no in user database, save new user record from the information in the ID token payload
         # Else establish a session for the user
         #if not account_id_exists(account_id):
-        user_id = add_user(account_id)
-        
+        db = hci_db()
+        user = db.add_user(id_info['email'])
         
         start_date = datetime.utcnow()
         expiry_date = start_date + timedelta(days=1) 
 
-        cookie_text = "{0}|{1}|{2}".format(user_id, start_date.strftime("%Y%m%d"), expiry_date.strftime("%Y%m%d"))
+        cookie_text = "{0}|{1}|{2}".format(user['user_id'], start_date.strftime("%Y%m%d"), expiry_date.strftime("%Y%m%d"))
         crypto_struct = {
             'key' : app_secrets['login']['aes_key_hex'],
             'iv' : app_secrets['login']['aes_iv_hex']

@@ -83,10 +83,39 @@ class hci_db():
         self.db = self.client['hci']
         logging.info("class=hci_db method=__init__ event=end")
 
+    ########################################
+    # User / Role functions
+    ########################################
+
+    def user_email_exists(self, email):
+        users = self.db['user']
+        doc_count = users.count_documents({"email": email } )
+        return doc_count > 0
+
+    def get_user(self, email):
+        users = self.db['user']
+        user = users.find_one({"email": email})
+        return user
+
+    def add_user(self, email):
+        if not self.user_email_exists(email):
+            user_id = str(uuid4())
+            user = {
+                'email' : email,
+                'user_id' : user_id
+            }
+            users = self.db['user']
+            user = users.insert_one(user)
+        return self.get_user(email)
+
+    ########################################
+    # PDF-splitter projects related functions
+    ########################################
+
     def project_exist(self, owner, title):
         projects = self.db['project']
         doc_count = projects.count_documents({"owner": {"$in":[owner]}, "title": title } )
-        return project_exist > 0
+        return doc_count > 0
 
     def find_project(self, owner, title):
         projects = self.db['project']
@@ -117,8 +146,6 @@ class hci_db():
         project_file = projects.find_one({"_id": ObjectId(id)}, {"filename" : 1, "file_bytes": 1})
         return (project_file['filename'], project_file['file_bytes'])
 
-        
-    #'PUBLIC', project_title, project_file_name, project_file_bytes
     def add_project(self, owner, title, file_name=None, file_bytes=None, file_size=0):
 
         logging.info("class=hci_db method=add_project event=begin")

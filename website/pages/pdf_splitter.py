@@ -32,11 +32,12 @@ def webroot_pdf_splitter_get():
 @app.route('/pdf-splitter/projects')
 def pdf_splitter_projects_get():
     logging.info("In pdf_splitter_projects_get()")
-    db = hci_db()
-    # ex = db.project_exist("PUBLIC", "asdasd")
-    projects = db.get_owned_projects('PUBLIC')
 
     view_model = get_model()
+
+    db = hci_db()
+    projects = db.get_owned_projects(view_model['user_id'])
+    
     view_model["projects"] = projects
     return view(view_model)
 
@@ -49,6 +50,8 @@ def pdf_splitter_create_project_get():
 @app.route('/pdf-splitter/create-project', methods=['POST'])
 def pdf_splitter_create_project_post():
     logging.info("In pdf_splitter_create_project_post()")
+
+    view_model = get_model()
 
     project_title   = request.form['project_title']
     project_action  = request.form['action']
@@ -63,14 +66,14 @@ def pdf_splitter_create_project_post():
         project_file_size = len(project_file_bytes)
 
     db = hci_db()
-    # db.find_project('PUBLIC', project_title)
-    project_id = db.add_project('PUBLIC', project_title, project_file_name, project_file_bytes, project_file_size)
+    
+    project_id = db.add_project(view_model['user_id'], project_title, project_file_name, project_file_bytes, project_file_size)
 
     # resp = make_response(view(view_model, view_path="site/webroot_get.html"))
     if project_id is not None:
         return redirect("/pdf-splitter/project/my-project-id")
     
-    view_model = get_model()
+    
     view_model["project_title"] = project_title
     view_model["error"] = "Project title exists"
     return view(view_model, view_path="pdf_splitter/pdf_splitter_create_project_get.html")

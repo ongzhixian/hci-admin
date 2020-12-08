@@ -38,9 +38,9 @@ def get_model(cookie_json=None):
     (is_token_valid, tokens) = is_valid_app_token(app_token)
     context['valid_app_token'] = is_token_valid
     if tokens is not None:
-        context["username"] = tokens[0]
+        context["user_id"] = tokens[0]
     else:
-        context["username"] = "UNKNOWN"
+        context["user_id"] = "UNKNOWN"
     # if is_valid_app_token(app_token):
     #     context['valid_app_token'] = True
     # else:
