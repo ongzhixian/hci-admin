@@ -9,6 +9,8 @@ from uuid import uuid4
 from bson.objectid import ObjectId
 from pymongo import MongoClient
 
+from google.cloud import firestore
+
 from helpers.app_runtime import app, app_settings, app_secrets
 
 ################################################################################
@@ -76,6 +78,42 @@ def add_project():
     client = get_mongodb_client('hci')
     
 
+########################################
+# Firestore
+########################################
+class hci_firestore():
+    def __init__(self):
+        logging.info("class=hci_firestore method=__init__ event=begin")
+        self.db = firestore.Client()
+        logging.info("class=hci_firestore method=__init__ event=end")
+
+    ########################################
+    # User / Role functions
+    ########################################
+
+    def user_email_exists(self, email):
+        doc_list = self.db.collection('user').where('email', '==', email).limit(1).get()
+        return len(doc_list) > 0
+
+    def get_user(self, email):
+        doc_list = self.db.collection('user').where('email', '==', email).limit(1).get()
+        if len(doc_list) > 0:
+            return doc_list[0]
+        return None
+
+    def add_user(self, email):
+        if not self.user_email_exists(email):
+            user_id = str(uuid4())
+            self.db.collection('user').add({
+                'email' : email,
+                'user_id' : user_id
+            })
+        return self.get_user(email)
+        
+
+########################################
+# MongoDb 
+########################################
 class hci_db():
     def __init__(self):
         logging.info("class=hci_db method=__init__ event=begin")
