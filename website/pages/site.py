@@ -10,7 +10,7 @@ from helpers.app_runtime import app, app_settings, app_secrets
 from helpers.app_helper import view, get_model, require_authentication
 
 from modules.security import aes_encrypt_as_hex
-from modules.datastore import account_id_exists, add_user, hci_db
+from modules.datastore import account_id_exists, add_user, hci_db, hci_firestore
 
 from flask import request, make_response, redirect
 
@@ -136,8 +136,10 @@ def webroot_authorize_post():
         # If the user no in user database, save new user record from the information in the ID token payload
         # Else establish a session for the user
         #if not account_id_exists(account_id):
+        fsdb = hci_firestore()
         db = hci_db()
         user = db.add_user(id_info['email'])
+        user = fsdb.add_user(id_info['email'])
         
         start_date = datetime.utcnow()
         expiry_date = start_date + timedelta(days=1) 

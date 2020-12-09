@@ -98,7 +98,7 @@ class hci_firestore():
     def get_user(self, email):
         doc_list = self.db.collection('user').where('email', '==', email).limit(1).get()
         if len(doc_list) > 0:
-            return doc_list[0]
+            return doc_list[0].to_dict()
         return None
 
     def add_user(self, email):
@@ -109,7 +109,7 @@ class hci_firestore():
                 'user_id' : user_id
             })
         return self.get_user(email)
-        
+
 
 ########################################
 # MongoDb 
