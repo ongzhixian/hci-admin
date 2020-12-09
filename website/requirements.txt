@@ -10,5 +10,7 @@ google-auth==1.6.3
 PyPDF2==1.26.0
 
 # Not using
+# google-cloud-storage==1.33.0
+# google-cloud-pubsub==2.2.0
 # google-cloud-firestore==2.0.2
 # google-cloud-datastore==1.9.0
