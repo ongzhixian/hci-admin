@@ -1,1 +1,0 @@
-$env:GOOGLE_APPLICATION_CREDENTIALS="C:\Users\zong\Documents\PowerShell\hci-admin-6ec8912b4124.json"
