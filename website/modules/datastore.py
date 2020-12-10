@@ -88,7 +88,7 @@ class hci_firestore():
         logging.info("class=hci_firestore method=__init__ event=end")
 
     ########################################
-    # User / Role functions
+    # User functions
     ########################################
 
     def user_email_exists(self, email):
@@ -109,6 +109,44 @@ class hci_firestore():
                 'user_id' : user_id
             })
         return self.get_user(email)
+
+    ########################################
+    # Role functions
+    ########################################
+
+    def get_roles(self):
+        doc_list = self.db.collection('role').get()
+        return list(map(lambda x: x.to_dict(), doc_list))
+
+    def role_exists(self, role_name):
+        #doc_list = self.db.collection('role').where('email', '==', email).limit(1).get()
+        # doc = self.db.collection('role').document(role_name).get()
+        # return doc is None
+        doc_list = self.db.collection('role').where('role_name', '==', role_name).limit(1).get()
+        return len(doc_list) > 0
+
+    def get_role(self, role_name):
+        #doc_list = self.db.collection('role').where('email', '==', email).limit(1).get()
+        #doc_list = self.db.collection('role').document(role_name)
+        # doc = self.db.collection('role').document(role_name).get()
+        # return doc
+        # if len(doc_list) > 0:
+        #     return doc_list[0].to_dict()
+        # return None
+        doc_list = self.db.collection('role').where('role_name', '==', role_name).limit(1).get()
+        if len(doc_list) > 0:
+            return doc_list[0].to_dict()
+        return None
+
+    def add_role(self, role_name):
+        if not self.role_exists(role_name):
+            role_id = str(uuid4())
+            self.db.collection('role').add({
+                'role_name' : role_name,
+                'role_id' : role_id
+            })
+        return self.get_role(role_name)
+
 
 
 ########################################

@@ -44,6 +44,13 @@
       <li><a href="/pdf-splitter/help">Help</a></li>
     </ul>
 
+    <ul id="administration_Dropdown" class="dropdown-content">
+        <li><a href="/administration/roles">Roles</a></li>
+        <li class="divider"></li>
+        <li><a href="/administration/test">Help</a></li>
+    </ul>
+  
+
     <nav>
       <div class="nav-wrapper">
         <a href="/" class="brand-logo">hci-admin</a>
@@ -56,6 +63,9 @@
           {% if valid_app_token %}
           <li>
             <a class="dropdown-trigger" data-target="pdfSplitter_Dropdown">PDF Splitter<i class="material-icons right">arrow_drop_down</i></a>
+          </li>
+          <li>
+            <a class="dropdown-trigger" data-target="administration_Dropdown">Administration<i class="material-icons right">arrow_drop_down</i></a>
           </li>
           <li><a href="javascript:void(0);" id="signOutButton">Sign out</a></li>
           {% else %}
