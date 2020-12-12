@@ -74,3 +74,40 @@ def administration_roles_post():
     # view_model["projects"] = projects
     return view(view_model, view_path="administration/administration_roles_get.html")
     #return view(view_model)
+
+@app.route('/administration/applications')
+def administration_applications_get():
+    logging.info("In administration_applications_get()")
+
+    view_model = get_model()
+    db = hci_firestore()
+    view_model["application_list"] = db.get_applications()
+
+    return view(view_model)
+
+
+@app.route('/administration/applications', methods=['POST'])
+def administration_applications_post():
+    logging.info("In administration_applications_post()")
+
+    view_model = get_model()
+
+    application_name   = request.form['application_name']
+    form_action  = request.form['action']
+
+    if form_action == "add_application":
+        db = hci_firestore()
+        db.add_application(application_name)
+
+    return view(view_model, view_path="administration/administration_applications_get.html")
+
+
+@app.route('/administration/assignments')
+def administration_assignments_get():
+    logging.info("In administration_assignments_get()")
+
+    view_model = get_model()
+    db = hci_firestore()
+    view_model["application_list"] = db.get_applications()
+
+    return view(view_model)

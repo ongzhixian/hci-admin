@@ -147,6 +147,39 @@ class hci_firestore():
             })
         return self.get_role(role_name)
 
+    ########################################
+    # Application functions
+    ########################################
+
+    def get_applications(self):
+        doc_list = self.db.collection('application').get()
+        return list(map(lambda x: x.to_dict(), doc_list))
+
+    def application_exists(self, application_name):
+        doc_list = self.db.collection('application').where('application_name', '==', application_name).limit(1).get()
+        return len(doc_list) > 0
+
+    def get_application(self, application_name):
+        doc_list = self.db.collection('application').where('application_name', '==', application_name).limit(1).get()
+        if len(doc_list) > 0:
+            return doc_list[0].to_dict()
+        return None
+
+    def add_application(self, application_name):
+        if not self.application_exists(application_name):
+            application_id = str(uuid4())
+            self.db.collection('application').add({
+                'application_name' : application_name,
+                'application_id' : application_id
+            })
+        return self.get_application(application_name)
+
+    ########################################
+    # Get x-users
+    ########################################
+
+    def get_application_users(self):
+        pass
 
 
 ########################################

@@ -17,3 +17,15 @@ dl.news dt {
 dl.news dd {
     margin:0;
 }
+
+.large-text, .large-text .select-dropdown {
+    font-size:large !important;
+}
+
+.x-large-text, .x-large-text .select-dropdown {
+    font-size:x-large !important;
+}
+
+.xx-large-text, .xx-large-text .select-dropdown {
+    font-size:xx-large !important;
+}
