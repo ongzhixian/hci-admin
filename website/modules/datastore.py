@@ -82,7 +82,20 @@ def add_project():
 # Firestore
 ########################################
 class hci_firestore():
+    """Represent an HCI Firestore
+
+    Attributes:
+        db (firestore.Client): Points to an instance of Firestore client
+
+    """
+
     def __init__(self):
+        """Initializes Firestore client as db
+
+        Args:
+            None
+
+        """
         logging.info("class=hci_firestore method=__init__ event=begin")
         self.db = firestore.Client()
         logging.info("class=hci_firestore method=__init__ event=end")
@@ -108,9 +121,27 @@ class hci_firestore():
     #     return self.db.collection('user').document(email).get() # DocumentSnapshot
 
     def get_user_ref(self, email):
+        """Retrieves document reference to document in user collection of matching email address
+
+        Args:
+            email: An email address
+
+        Returns:
+            DocumentReference of matching user document
+
+        """
         return self.db.collection('user').document(email) # DocumentReference
 
     def add_user(self, email):
+        """Add or get snapshot of document in user collection of matching email address
+
+        Args:
+            email: An email address
+
+        Returns:
+            DocumentSnapshot of matching user document
+
+        """
         doc_ref = self.get_user_ref(email)
         if not doc_ref.get().exists:
             doc_id = str(uuid4())
@@ -245,17 +276,19 @@ class hci_firestore():
         # find the record 
         user = self.get_user(user_email, False)
         user.reference.update({"applications" : firestore.ArrayRemove([application_name])})
+
+    def assign_application(self, application_name, email_address):
+        """Status: dev | review | production """
+        doc_ref = self.get_user_ref(email_address)
+        app_ref = doc_ref.collection('applications').document(application_name)
+        if not app_ref.get().exists:
+            app_ref.set({}) # Placeholder
         
-    def has_access(self, application_name, user_id):
-        #user = self.get_user(user_email, False)
-        import pdb
-        pdb.set_trace()
-
-        doc_list = self.db.collection('user').where('user_id', '==', user_id).limit(1).get()
-        #"Administration", context["user_id"]
-
-        qq[0].reference.collection('applications').document('bY582Nz7ZCERCPQqiJbm1').get().exists
-        pass
+    def has_access(self, application_name, email_address):
+        """Status: dev | review | production """
+        doc_ref = self.get_user_ref(email_address)
+        app_ref = doc_ref.collection('applications').document(application_name)
+        return app_ref.get().exists
 
 ########################################
 # MongoDb 

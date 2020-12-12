@@ -31,7 +31,8 @@ def api_administration(errorMessages=None):
 
     if action == "add_application_user":
         db = hci_firestore()
-        db.add_application_user(application_name, user_email)
+        #db.add_application_user(application_name, user_email)
+        db.assign_application(application_name, user_email)
         #user_list = db.get_application_users(application_name)
 
         return "OK"
