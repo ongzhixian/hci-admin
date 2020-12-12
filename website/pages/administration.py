@@ -107,7 +107,12 @@ def administration_assignments_get():
     logging.info("In administration_assignments_get()")
 
     view_model = get_model()
+    
     db = hci_firestore()
+    db.has_access("Administration", view_model["user_id"])
     view_model["application_list"] = db.get_applications()
+
+    # how to check if user can access this application
+    
 
     return view(view_model)

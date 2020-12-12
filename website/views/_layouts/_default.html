@@ -163,14 +163,12 @@
         documentReady : function() {
             p.signOutButton ? p.signOutButton.addEventListener("click", p.signOut) : null;
 
-
-
             M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'), { 
                 'coverTrigger' : false 
             });
         },
 
-        asignOut : function() {
+        signOut : function() {
             if (gapi.auth2 === undefined) {
                 gapi.load('auth2', function() {
                     gapi.auth2.init().then(function() {

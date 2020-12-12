@@ -139,7 +139,7 @@ def webroot_authorize_post():
         fsdb = hci_firestore()
         db = hci_db()
         user = db.add_user(id_info['email'])
-        user = fsdb.add_user(id_info['email'])
+        user = fsdb.add_user(id_info['email']).to_dict()
         
         start_date = datetime.utcnow()
         expiry_date = start_date + timedelta(days=1) 

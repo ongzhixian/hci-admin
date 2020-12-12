@@ -21,15 +21,21 @@ from modules.datastore import hci_db, hci_firestore
 def api_administration(errorMessages=None):
 
     logging.info("In api_administration()")
-    
-    application_name = request.form["application_name"]
 
-    db = hci_firestore()
-    user_list = db.get_application_users(application_name)
+    if not request.is_json:
+        return "NG"
 
-    return user_list
+    application_name = request.json["application_name"]
+    user_email = request.json["user_email"]
+    action = request.json["action"]
 
-    return "OK"
+    if action == "add_application_user":
+        db = hci_firestore()
+        db.add_application_user(application_name, user_email)
+        #user_list = db.get_application_users(application_name)
+
+        return "OK"
+    return "NG"
 
 
 @app.route('/api/admin', methods=['GET', 'POST'])

@@ -206,8 +206,13 @@
                 }
             };
             xhr.open('POST', '/api/administration');
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.send('application_name=' + application_name);
+            //xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({
+                "user_email" : "overxianz@gmail.com",
+                "application_name" : application_name,
+                "action" : "add_application_user"
+            }));
         },
 
         documentReady : function() {

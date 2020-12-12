@@ -91,24 +91,34 @@ class hci_firestore():
     # User functions
     ########################################
 
-    def user_email_exists(self, email):
-        doc_list = self.db.collection('user').where('email', '==', email).limit(1).get()
-        return len(doc_list) > 0
+    # def user_email_exists(self, email):
+    #     doc = self.db.collection('user').document(email).get() # DocumentSnapshot
+    #     return doc.exists
+        # doc_list = self.db.collection('user').where('email', '==', email).limit(1).get()
+        # return len(doc_list) > 0
+    # def get_user(self, email, asDict=True):
+    #     doc_list = self.db.collection('user').where('email', '==', email).limit(1).get()
+    #     if len(doc_list) > 0:
+    #         if asDict:
+    #             return doc_list[0].to_dict()
+    #         else:
+    #             return doc_list[0]
+    #     return None
+    # def get_user(self, email):
+    #     return self.db.collection('user').document(email).get() # DocumentSnapshot
 
-    def get_user(self, email):
-        doc_list = self.db.collection('user').where('email', '==', email).limit(1).get()
-        if len(doc_list) > 0:
-            return doc_list[0].to_dict()
-        return None
+    def get_user_ref(self, email):
+        return self.db.collection('user').document(email) # DocumentReference
 
     def add_user(self, email):
-        if not self.user_email_exists(email):
-            user_id = str(uuid4())
-            self.db.collection('user').add({
+        doc_ref = self.get_user_ref(email)
+        if not doc_ref.get().exists:
+            doc_id = str(uuid4())
+            doc_ref.set({
                 'email' : email,
-                'user_id' : user_id
+                'user_id' : doc_id
             })
-        return self.get_user(email)
+        return doc_ref.get()
 
     ########################################
     # Role functions
@@ -116,36 +126,50 @@ class hci_firestore():
 
     def get_roles(self):
         doc_list = self.db.collection('role').get()
-        return list(map(lambda x: x.to_dict(), doc_list))
+        return list(map(lambda x: { "id" : x.id, "data" : x.to_dict()}, doc_list))
 
-    def role_exists(self, role_name):
-        #doc_list = self.db.collection('role').where('email', '==', email).limit(1).get()
-        # doc = self.db.collection('role').document(role_name).get()
-        # return doc is None
-        doc_list = self.db.collection('role').where('role_name', '==', role_name).limit(1).get()
-        return len(doc_list) > 0
+    # def role_exists(self, role_name):
+    #     #doc_list = self.db.collection('role').where('email', '==', email).limit(1).get()
+    #     # doc = self.db.collection('role').document(role_name).get()
+    #     # return doc is None
+    #     doc_list = self.db.collection('role').where('role_name', '==', role_name).limit(1).get()
+    #     return len(doc_list) > 0
 
-    def get_role(self, role_name):
-        #doc_list = self.db.collection('role').where('email', '==', email).limit(1).get()
-        #doc_list = self.db.collection('role').document(role_name)
-        # doc = self.db.collection('role').document(role_name).get()
-        # return doc
-        # if len(doc_list) > 0:
-        #     return doc_list[0].to_dict()
-        # return None
-        doc_list = self.db.collection('role').where('role_name', '==', role_name).limit(1).get()
-        if len(doc_list) > 0:
-            return doc_list[0].to_dict()
-        return None
+    # def get_role(self, role_name):
+    #     #doc_list = self.db.collection('role').where('email', '==', email).limit(1).get()
+    #     #doc_list = self.db.collection('role').document(role_name)
+    #     # doc = self.db.collection('role').document(role_name).get()
+    #     # return doc
+    #     # if len(doc_list) > 0:
+    #     #     return doc_list[0].to_dict()
+    #     # return None
+    #     doc_list = self.db.collection('role').where('role_name', '==', role_name).limit(1).get()
+    #     if len(doc_list) > 0:
+    #         return doc_list[0].to_dict()
+    #     return None
+
+    # def add_role2(self, role_name):
+    #     if not self.role_exists(role_name):
+    #         role_id = str(uuid4())
+    #         self.db.collection('role').add({
+    #             'role_name' : role_name,
+    #             'role_id' : role_id
+    #         })
+    #     return self.get_role(role_name)
+
+    def get_role_ref(self, role_name):
+        return self.db.collection('role').document(role_name) # DocumentReference
 
     def add_role(self, role_name):
-        if not self.role_exists(role_name):
-            role_id = str(uuid4())
-            self.db.collection('role').add({
+        doc_ref = self.get_role_ref(role_name)
+        if not doc_ref.get().exists:
+            doc_id = str(uuid4())
+            doc_ref.set({
                 'role_name' : role_name,
-                'role_id' : role_id
+                'role_id' : doc_id
             })
-        return self.get_role(role_name)
+        return doc_ref.get()
+
 
     ########################################
     # Application functions
@@ -153,26 +177,44 @@ class hci_firestore():
 
     def get_applications(self):
         doc_list = self.db.collection('application').get()
-        return list(map(lambda x: x.to_dict(), doc_list))
+        return list(map(lambda x: { "id" : x.id, "data" : x.to_dict()}, doc_list))
+        # return list(map(lambda x: x.to_dict(), doc_list))
 
-    def application_exists(self, application_name):
-        doc_list = self.db.collection('application').where('application_name', '==', application_name).limit(1).get()
-        return len(doc_list) > 0
+    # def application_exists(self, application_name):
+    #     doc_list = self.db.collection('application').where('application_name', '==', application_name).limit(1).get()
+    #     return len(doc_list) > 0
 
-    def get_application(self, application_name):
-        doc_list = self.db.collection('application').where('application_name', '==', application_name).limit(1).get()
-        if len(doc_list) > 0:
-            return doc_list[0].to_dict()
-        return None
+    # def get_application(self, application_name, asDict=True):
+    #     doc_list = self.db.collection('application').where('application_name', '==', application_name).limit(1).get()
+    #     if len(doc_list) > 0:
+    #         if asDict:
+    #             return doc_list[0].to_dict()
+    #         else:
+    #             return doc_list[0]
+    #     return None
+
+    # def add_application2(self, application_name):
+    #     if not self.application_exists(application_name):
+    #         application_id = str(uuid4())
+    #         self.db.collection('application').add({
+    #             'application_name' : application_name,
+    #             'application_id' : application_id
+    #         })
+    #     return self.get_application(application_name)
+
+
+    def get_application_ref(self, application_name):
+        return self.db.collection('application').document(application_name) # DocumentReference
 
     def add_application(self, application_name):
-        if not self.application_exists(application_name):
-            application_id = str(uuid4())
-            self.db.collection('application').add({
+        doc_ref = self.get_application_ref(application_name)
+        if not doc_ref.get().exists:
+            doc_id = str(uuid4())
+            doc_ref.set({
                 'application_name' : application_name,
-                'application_id' : application_id
+                'application_id' : doc_id
             })
-        return self.get_application(application_name)
+        return doc_ref.get()
 
     ########################################
     # Get x-users
@@ -181,6 +223,39 @@ class hci_firestore():
     def get_application_users(self):
         pass
 
+    def add_application_user(self, application_name, user_email):
+        # find the record 
+        user = self.get_user(user_email, False)
+        application = self.get_application(application_name, False)
+        if user is not None and application is not None:
+            application_doc = user.reference.collection('applications').document(application.reference.id).set({})
+            #application_doc.reference.update({"roles" : firestore.ArrayUnion([])})
+            # import pdb
+            # pdb.set_trace()
+            # user.reference.update({"applications" : firestore.ArrayUnion([
+            #     {
+            #         "id" : application.reference.id,
+            #         "roles" : firestore.ArrayUnion(['xxx'])
+            #     }
+            #     ])})
+        else:
+            logging.info("FAILED add_application_user({0}, {1})".format(application_name, user_email))
+        
+    def remove_application_user(self, application_name, user_email):
+        # find the record 
+        user = self.get_user(user_email, False)
+        user.reference.update({"applications" : firestore.ArrayRemove([application_name])})
+        
+    def has_access(self, application_name, user_id):
+        #user = self.get_user(user_email, False)
+        import pdb
+        pdb.set_trace()
+
+        doc_list = self.db.collection('user').where('user_id', '==', user_id).limit(1).get()
+        #"Administration", context["user_id"]
+
+        qq[0].reference.collection('applications').document('bY582Nz7ZCERCPQqiJbm1').get().exists
+        pass
 
 ########################################
 # MongoDb 
