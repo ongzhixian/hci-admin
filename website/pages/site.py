@@ -18,6 +18,8 @@ from flask import request, make_response, redirect
 # Routes
 ################################################################################
 
+
+
 @app.route('/')
 def webroot_get():
     logging.info("In webroot_get()")
@@ -136,15 +138,17 @@ def webroot_authorize_post():
         # If the user no in user database, save new user record from the information in the ID token payload
         # Else establish a session for the user
         #if not account_id_exists(account_id):
+        # db = hci_db()
+        # user = db.add_user(id_info['email'])
+        
         fsdb = hci_firestore()
-        db = hci_db()
-        user = db.add_user(id_info['email'])
-        user = fsdb.add_user(id_info['email']).to_dict()
+        user_id = fsdb.get_user_id(id_info['email'])
+        # (success_flag, user_id) = fsdb.add_user(id_info['email'])
         
         start_date = datetime.utcnow()
         expiry_date = start_date + timedelta(days=1) 
 
-        cookie_text = "{0}|{1}|{2}".format(user['user_id'], start_date.strftime("%Y%m%d"), expiry_date.strftime("%Y%m%d"))
+        cookie_text = "{0}|{1}|{2}".format(user_id, start_date.strftime("%Y%m%d"), expiry_date.strftime("%Y%m%d"))
         crypto_struct = {
             'key' : app_secrets['login']['aes_key_hex'],
             'iv' : app_secrets['login']['aes_iv_hex']
@@ -183,3 +187,16 @@ def webroot_authorize_post():
     # resp = make_response(view(view_model, view_path="site/webroot_logout_get.html"))
     # resp.set_cookie(app_settings['application']['app_token'], '', expires=0)
     # return resp
+
+
+########################################
+# Error handlers
+########################################
+@app.errorhandler(404)
+def http_404(e):
+    # note that we set the 404 status explicitly
+    # logging.info("In webroot_get()")
+    # view_model = get_model()
+    # return view(view_model)
+    # TODO make a fancier page
+    return "Resource not found"

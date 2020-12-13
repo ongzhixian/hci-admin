@@ -120,7 +120,8 @@ class hci_firestore():
     # def get_user(self, email):
     #     return self.db.collection('user').document(email).get() # DocumentSnapshot
 
-    def get_user_ref(self, email):
+
+    def get_user_ref(self, doc_id):
         """Retrieves document reference to document in user collection of matching email address
 
         Args:
@@ -130,26 +131,86 @@ class hci_firestore():
             DocumentReference of matching user document
 
         """
-        return self.db.collection('user').document(email) # DocumentReference
+        return self.db.collection('user').document(doc_id) # DocumentReference
 
-    def add_user(self, email):
+    
+    def add_user(self, email_address):
         """Add or get snapshot of document in user collection of matching email address
 
         Args:
-            email: An email address
+            email_address: An email address
 
         Returns:
             DocumentSnapshot of matching user document
 
         """
-        doc_ref = self.get_user_ref(email)
+
+        user_id = self.find_user(email_address)
+        if user_id is None:
+            doc_id = str(uuid4())
+            (update_time, user_id) = self.db.collection('user').add({
+                'email' : email_address,
+                'user_key' : doc_id
+            })
+        return (True, user_id)
+
+        doc_ref = self.get_user_ref(email_address)
         if not doc_ref.get().exists:
             doc_id = str(uuid4())
             doc_ref.set({
-                'email' : email,
+                'email' : email_address,
                 'user_id' : doc_id
             })
         return doc_ref.get()
+
+
+    def find_user(self, email_address):
+        """Status: dev | review | production """
+
+        logging.info("email_address={0}|event=begin".format(email_address))
+
+        result = None
+
+        query = self.db.collection('user').where('email', '==', email_address).limit(1) # Query
+
+        doc_list = query.get() # list of DocumentSnapshot
+
+        if len(doc_list) > 0:
+            result = doc_list[0].id
+            
+        logging.info("email_address={0}|result={1}|event=end".format(email_address, result))
+
+        return result
+
+    def get_user_id(self, email_address):
+        """Status: dev | review | production """
+
+        logging.info("email_address={0}|event=begin".format(email_address))
+
+        user_id = self.find_user(email_address)
+
+        if user_id is None: # Add user if no user_id found
+
+            allow_to_add = True # TODO: at a later date
+
+            if not allow_to_add:
+                
+                user_id = "Unknown"
+
+            else:
+
+                doc_id = str(uuid4())
+
+                (update_time, user_id) = self.db.collection('user').add({
+                    'email' : email_address,
+                    'user_key' : doc_id
+                })
+
+        logging.info("email_address={0}|result={1}|event=end".format(email_address, user_id))
+
+        return user_id
+
+        
 
     ########################################
     # Role functions
@@ -277,16 +338,55 @@ class hci_firestore():
         user = self.get_user(user_email, False)
         user.reference.update({"applications" : firestore.ArrayRemove([application_name])})
 
-    def assign_application(self, application_name, email_address):
+    def add_application_access(self, application_name, user_id):
         """Status: dev | review | production """
-        doc_ref = self.get_user_ref(email_address)
-        app_ref = doc_ref.collection('applications').document(application_name)
-        if not app_ref.get().exists:
-            app_ref.set({}) # Placeholder
+
+        logging.info("application_name={0}|user_id={1}|event=begin".format(application_name, user_id))
+
+        doc_ref = self.get_user_ref(user_id)
+
+        # we should not add if unvalid user or not exists or not allow to assign
+
+        if not doc_ref.get().exists:
+
+            logging.info("message=User does not exists|user_id={1}|event=end".format(application_name, user_id))
+            
+        else:
+
+            app_ref = doc_ref.collection('applications').document(application_name)
+
+            allow_to_add = True # TODO
+
+            if not app_ref.get().exists and allow_to_add:
+
+                logging.info("message=Add user|allow_to_add={0}|add=|event=end".format(allow_to_add))
+
+                result = app_ref.set({}) # Empty document as placeholder
+
+            else:
+
+                logging.info("message=Not allow to add|allow_to_add={0}|event=end".format(allow_to_add))
+            
+
+    def remove_application_access(self, application_name, user_id):
+        """Status: dev | review | production """
+        doc_ref = self.get_user_ref(user_id)
+
+        # we should not add if unvalid user or not exists or not allow to assign
+
+        if not doc_ref.get().exists:
+            is_allowed_action = True # TODO
+
+            if not is_allowed_action:
+                return # Do nothing
+
+            app_ref = doc_ref.collection('applications').document(application_name)
+            if app_ref.get().exists:
+                app_ref.delete()
         
-    def has_access(self, application_name, email_address):
+    def has_access(self, application_name, user_id):
         """Status: dev | review | production """
-        doc_ref = self.get_user_ref(email_address)
+        doc_ref = self.get_user_ref(user_id)
         app_ref = doc_ref.collection('applications').document(application_name)
         return app_ref.get().exists
 

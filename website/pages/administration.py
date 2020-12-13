@@ -14,9 +14,11 @@ from modules.security import aes_encrypt_as_hex
 from modules.datastore import account_id_exists, add_user
 from modules.datastore import hci_db, hci_firestore
 
-from flask import request, make_response, redirect, send_file
+from flask import request, make_response, redirect, send_file, abort
 
 from PyPDF2 import PdfFileWriter, PdfFileReader
+
+__MODULE__ = "Administration"
 
 ################################################################################
 # Routes
@@ -88,6 +90,7 @@ def administration_applications_get():
 
 @app.route('/administration/applications', methods=['POST'])
 def administration_applications_post():
+
     logging.info("In administration_applications_post()")
 
     view_model = get_model()
@@ -104,15 +107,22 @@ def administration_applications_post():
 
 @app.route('/administration/assignments')
 def administration_assignments_get():
-    logging.info("In administration_assignments_get()")
-
-    view_model = get_model()
+    """Status: dev | test | review | production """
     
     db = hci_firestore()
-    db.has_access("Administration", view_model["user_id"])
-    view_model["application_list"] = db.get_applications()
 
-    # how to check if user can access this application
+    view_model = get_model()
+
+    has_access = db.has_access(__MODULE__, view_model["user_id"])
+
+    if not has_access:
+
+        logging.info("has_access={0}|event=end".format(has_access))
+
+        abort(404)
     
+    logging.info("has_access={0}|event=end".format(has_access))
+
+    # view_model["application_list"] = db.get_applications()
 
     return view(view_model)
