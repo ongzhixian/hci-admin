@@ -1,0 +1,230 @@
+{% import "./_macros/_default.html" as macros %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="{{google_client_id}}">
+
+
+    <title>{% block title %} Home {% endblock %} - hci-admin</title>
+
+    <!-- Resources that is not available on our website -->
+    <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    {% if app_settings["IS_HOSTED"] %}
+    <!-- Use CDN -->
+    <link type="text/css" rel="stylesheet" href="/css/materialize/materialize.min.css"  media="screen,projection"/>
+    {% else %}
+    <!-- Use local copies -->
+    <link type="text/css" rel="stylesheet" href="/css/materialize/materialize.min.css"  media="screen,projection"/>
+    {% endif %}
+
+    <!-- CSS that is only available on our website-->
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/site.css" />
+    
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+    
+    {% block linktags %}{% endblock %}
+
+  </head>
+
+  <body>
+    <!-- Dropdown Structure -->
+    <ul id="pdfSplitter_Dropdown" class="dropdown-content">
+      <li><a href="/pdf-splitter">Introduction</a></li>
+      <li><a href="/pdf-splitter/projects">Projects</a></li>
+      <!-- 
+      <li class="divider"></li>
+      <li><a href="/pdf-splitter/create-project">Create project</a></li>
+      <li><a href="/pdf-splitter/create-project">Download</a></li> 
+      -->
+      <li class="divider"></li>
+      <li><a href="/pdf-splitter/help">Help</a></li>
+    </ul>
+
+    <ul id="administration_Dropdown" class="dropdown-content">
+        <li><a href="/administration/applications">Applications</a></li>
+        <li><a href="/administration/roles">Roles</a></li>
+        <li><a href="/administration/users">Users</a></li>
+        <li><a href="/administration/assignments">Assignments</a></li>
+        <li class="divider"></li>
+        <li><a href="/administration/test">Test buttons</a></li> 
+    </ul>
+  
+
+    <nav>
+      <div class="nav-wrapper">
+        <a href="/" class="brand-logo">hci-admin</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+
+          <!-- 
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+           -->
+          {% if valid_app_token %}
+          <li>
+            <a class="dropdown-trigger" data-target="pdfSplitter_Dropdown">PDF Splitter<i class="material-icons right">arrow_drop_down</i></a>
+          </li>
+          <li>
+            <a class="dropdown-trigger" data-target="administration_Dropdown">Administration<i class="material-icons right">arrow_drop_down</i></a>
+          </li>
+          <li><a href="javascript:void(0);" id="signOutButton">Sign out</a></li>
+          {% else %}
+          <li><div class="g-signin2" data-onsuccess="signIn"></div></li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+        
+    
+    {# 
+    {{ macros.page_nav_header2(view_id, valid_app_token, username) }}
+    #}
+    
+    {% block content %}
+    <!-- Primary Page Layout
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    
+    {% endblock %}
+    <!-- End Document
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    
+    
+    <script type="text/javascript" src="/js/materialize/materialize.min.js"></script>
+    <script>
+    const p = {
+        signOutButton : document.getElementById('signOutButton'),
+
+        gapiAuthLoaded : function(func) {
+            return new Promise(function(resolve, reject) {
+                if (((typeof gapi) === "undefined") || (!gapi))
+                    reject("No gapi");
+                
+                if (gapi.auth2 === undefined) {
+                    gapi.load('auth2', function() {
+                        gapi.auth2.init().then(resolve());
+                    });
+                } else {
+                    resolve();
+                }
+            });
+        },
+
+        signOut : function() {
+            p.gapiAuthLoaded().then(function() {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                    console.log('User signed out.');
+                    p.send.signOutCookies();
+                });        
+            });
+        },
+
+        send : {
+            authorize : function(id_token) {
+                var xhr = new XMLHttpRequest();
+                xhr.onload = function() {
+                    console.log('Signed in as: ' + xhr.responseText);
+                };
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        if (this.response.length > 0) {
+                            location.href = this.response;
+                        }
+                    }
+                };
+                xhr.open('POST', '/authorize' + window.location.search);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.send('idtoken=' + id_token);
+            },
+
+            signOutCookies : function() {
+                var xhr = new XMLHttpRequest();
+                xhr.onload = function() {
+                    console.log('Signed in as: ' + xhr.responseText);
+                };
+                xhr.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        if (this.response.length > 0) {
+                            location.href = this.response;
+                        }
+                    }
+                };
+                xhr.open('GET', '/void-cookies');
+                xhr.send();
+            }
+
+        },
+
+        documentReady : function() {
+            p.signOutButton ? p.signOutButton.addEventListener("click", p.signOut) : null;
+
+            M.Dropdown.init(document.querySelectorAll('.dropdown-trigger'), { 
+                'coverTrigger' : false 
+            });
+        },
+
+        signOut : function() {
+            if (gapi.auth2 === undefined) {
+                gapi.load('auth2', function() {
+                    gapi.auth2.init().then(function() {
+                        var auth2 = gapi.auth2.getAuthInstance();
+                        auth2.signOut().then(function () {
+                            console.log('User signed out.');
+                            p.send.signOutCookies();
+                        });
+                    })
+                });
+            } else {
+                var auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () {
+                    console.log('User signed out.');
+                    p.send.signOutCookies();
+                });
+            }
+        }
+    };
+
+    (function() {
+        if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
+            p.documentReady();
+        } else {
+            document.addEventListener("DOMContentLoaded", p.documentReady);
+        }
+    }());
+
+    function initGapi() {
+        gapi.load('auth2', function() {
+            gapi.auth2.init();
+        });
+    }
+
+    function signIn(googleUser) {
+        
+        console.log("onSignIn_start");
+
+        // Useful data for your client-side scripts:
+        var auth2 = gapi.auth2.getAuthInstance();
+        var profile = googleUser.getBasicProfile();
+        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+        console.log('Full Name: ' + profile.getName());
+        console.log('Given Name: ' + profile.getGivenName());
+        console.log('Family Name: ' + profile.getFamilyName());
+        console.log("Image URL: " + profile.getImageUrl());
+        console.log("Email: " + profile.getEmail());
+
+        // The ID token you need to pass to your backend:
+        var id_token = googleUser.getAuthResponse().id_token;
+        console.log("ID Token: " + id_token);
+
+        p.send.authorize(id_token);
+
+    }
+    </script>
+    
+    {% block scripts %}{% endblock %}
+    <script src="https://apis.google.com/js/platform.js?onload=initGapi" async defer></script>
+  </body>
+</html>

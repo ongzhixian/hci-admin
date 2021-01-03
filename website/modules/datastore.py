@@ -390,6 +390,11 @@ class hci_firestore():
         app_ref = doc_ref.collection('applications').document(application_name)
         return app_ref.get().exists
 
+    def get_user_list(self):
+        """Status: dev | review | production """
+        doc_list = self.db.collection('user').get() # collectionReference
+        return list(map(lambda x: { "id" : x.id, "data" : x.to_dict()}, doc_list))
+
 ########################################
 # MongoDb 
 ########################################
@@ -457,6 +462,12 @@ class hci_db():
         newvalues = { "$set": { "split_method": split_method, "n_page": n_page, "terminator_text": terminator_text } }
         projects.update_one({"_id": ObjectId(id)}, newvalues)
         return True
+
+    def delete_project(self, id):
+        projects = self.db['project']
+        projects.delete_one({"_id": ObjectId(id)})
+        return True
+
 
     def get_file(self, id):
         projects = self.db['project']

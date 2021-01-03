@@ -115,6 +115,8 @@ def administration_assignments_get():
 
     has_access = db.has_access(__MODULE__, view_model["user_id"])
 
+    user_list = db.get_user_list()
+
     if not has_access:
 
         logging.info("has_access={0}|event=end".format(has_access))
@@ -124,5 +126,7 @@ def administration_assignments_get():
     logging.info("has_access={0}|event=end".format(has_access))
 
     # view_model["application_list"] = db.get_applications()
+
+    view_model["user_list"] = user_list
 
     return view(view_model)

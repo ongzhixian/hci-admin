@@ -19,12 +19,18 @@ from flask import request, make_response, redirect
 ################################################################################
 
 
-
 @app.route('/')
 def webroot_get():
     logging.info("In webroot_get()")
     view_model = get_model()
     return view(view_model)
+
+@app.route('/classifier')
+def webroot_classifier_get():
+    logging.info("In webroot_classifier_get()")
+    view_model = get_model()
+    return view(view_model)
+
 
 @app.route('/about')
 @require_authentication
@@ -199,4 +205,4 @@ def http_404(e):
     # view_model = get_model()
     # return view(view_model)
     # TODO make a fancier page
-    return "Resource not found"
+    return "Resource not found", 404

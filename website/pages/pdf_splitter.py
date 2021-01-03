@@ -71,7 +71,7 @@ def pdf_splitter_create_project_post():
 
     # resp = make_response(view(view_model, view_path="site/webroot_get.html"))
     if project_id is not None:
-        return redirect("/pdf-splitter/project/my-project-id")
+        return redirect("/pdf-splitter/project/{0}".format(project_id))
     
     
     view_model["project_title"] = project_title
@@ -106,10 +106,10 @@ def pdf_splitter_source_pdf_file_get(project_id = None):
 def pdf_splitter_project_post(project_id = None):
     logging.info("In pdf_splitter_project_post()")
 
-    n_page          = request.form['input_n_page']
-    terminator_text = request.form['input_terminator_text']
-    split_method    = request.form['radio_split_method']
-    action          = request.form['action']
+    n_page          = request.form['input_n_page']          if 'input_n_page' in request.form else ''
+    terminator_text = request.form['input_terminator_text'] if 'input_terminator_text' in request.form else ''
+    split_method    = request.form['radio_split_method']    if 'radio_split_method' in request.form else ''
+    action          = request.form['action']                if 'action' in request.form else ''
 
     db = hci_db()
 
@@ -131,8 +131,14 @@ def pdf_splitter_project_post(project_id = None):
     if action == "save_project":
         db.update_project(project_id, split_method, n_page, terminator_text)
 
+    if action == "delete_project":
+        db.delete_project(project_id)
+        view_model = get_model()
+        return view(view_model, view_path="pdf_splitter/pdf_splitter_projects_get.html")
+
+
     project = db.get_project_info(project_id)
-    view_model = get_model()
+    
     view_model["project"] = project
     view_model["message"] = "Saved"
     return view(view_model, view_path="pdf_splitter/pdf_splitter_project_get.html")
