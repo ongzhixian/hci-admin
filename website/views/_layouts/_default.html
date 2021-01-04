@@ -52,7 +52,11 @@
         <li class="divider"></li>
         <li><a href="/administration/test">Test buttons</a></li> 
     </ul>
-  
+    <ul id="knowledge_Dropdown" class="dropdown-content">
+        <li><a href="/knowledge/map">Map</a></li>
+        <li class="divider"></li>
+        <li><a href="/knowledge/test">Test buttons</a></li> 
+    </ul>
 
     <nav>
       <div class="nav-wrapper">
@@ -69,6 +73,9 @@
           </li>
           <li>
             <a class="dropdown-trigger" data-target="administration_Dropdown">Administration<i class="material-icons right">arrow_drop_down</i></a>
+          </li>
+          <li>
+            <a class="dropdown-trigger" data-target="knowledge_Dropdown">Knowledge<i class="material-icons right">arrow_drop_down</i></a>
           </li>
           <li><a href="javascript:void(0);" id="signOutButton">Sign out</a></li>
           {% else %}

@@ -8,6 +8,9 @@ runtime: python37
 # It seems that it neeeds to be specify via gcloud deploy
 #version: 1-0-0
 
+env_variables:
+  GOOGLE_APPLICATION_CREDENTIALS: "C:\Users\zong\Documents\PowerShell\hci-admin-6ec8912b4124.json"
+
 handlers:
 
 - url: /.well-known

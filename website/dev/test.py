@@ -48,8 +48,7 @@ for page_index in range(pdf_file_page_count):
     page = pdf_file.getPage(page_index)
     txt = page.extractText()
     print(txt)
-    import pdb
-    pdb.set_trace()
+    
 
     print("start_new_file is: {0}".format(start_new_file))
 

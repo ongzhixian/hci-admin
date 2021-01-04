@@ -13,10 +13,10 @@ from helpers.app_helper import view, get_model
 # Setup routes
 ################################################################################
 
-@app.route('/api/kb/search', methods=['GET', 'POST'])
-def api_kb_search(errorMessages=None):
+@app.route('/api/note/search', methods=['GET', 'POST'])
+def api_note_search(errorMessages=None):
 
-    logging.info("In api_kb_search()")
+    logging.info("In api_note_search()")
 
     #sqlite_file = 'D:/data/sqlite3/url_kb.sqlite3'
     sqlite_file = 'C:/Users/zong/Documents/PowerShell/url_kb.sqlite3'
@@ -38,23 +38,3 @@ def api_kb_search(errorMessages=None):
 
     return "OK"
     #return str(datetime.utcnow())
-
-
-# @app.route('/api/msg', methods=['GET', 'POST'])
-# def api_msg(errorMessages=None):
-
-#     logging.info("In api_msg()")
-
-#     # add_message("hello world 2")
-
-#     return "OK"
-    #return str(datetime.utcnow())
-
-# @app.route('/api/test/hello', method='GET')
-# def api_test_hello():
-#     return "hello world from ..."
-#     # logging.debug("IN api_test_rand()")
-#     # bs = get_random_byte_string(16)
-#     # logging.info(bs)
-#     # hs = byte_string_to_hex_string(bs)
-#     # return hs[:8]
