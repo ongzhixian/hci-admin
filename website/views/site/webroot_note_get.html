@@ -18,9 +18,14 @@
     </div>
     
     <div class="search-results grid-content" id="search_results">
-        <!-- <form style="height: 100%; margin: 0;">
-            <textarea id="mytextarea"></textarea>
-        </form> -->
+        
+        <p>You currently have no notes.</p>
+        <!-- 
+
+        <form style="height: 100%; margin: 0;"></form>
+         -->
+            
+        
 
         <!-- 
         <div class="loader">
@@ -70,10 +75,14 @@
         <div>
             <button type="button" id="add_new_note_button">Add new note</button>
 
+            <div id="tag_panel"></div>
+            
+            <!-- 
             <a href="/classifier">Classifier</a>
             <a href="/research">Research</a>
             <a href="/">Home</a>
             action-bar
+             -->
         </div>
     </div>
     
@@ -94,15 +103,28 @@
 
         const p = {
             input_searchbox : null,
+            add_new_note_button : null, 
+            note_doc_id : null,
 
             setup : function() {
                 console.log("Setup start");
 
+                p.add_new_note_button = $("#add_new_note_button");
+                p.add_new_note_button.click(function(e) {
+                    // Clear results
+                    // Add textarea
+                    // Init editor
+                    $("div.search-results").children().remove();
+                    $("div.search-results").prepend(
+                        //$("<input>").attr("type", "text").attr("placeholder", "title").addClass("doc-title"),
+                        $("<textarea>").attr("id", "mytextarea")
+                    );
 
+                    p.init_editor();
+                });
 
                 p.input_searchbox = $("#input_search_text");
                 p.input_searchbox.change(function(e) {
-                    // 
                     if (e.target.value.trim().length > 0) {
                         console.debug("Do ajax search %s", e.target.value);
                         p.do_ajax_search(e.target.value);
@@ -114,10 +136,9 @@
             },
 
             init_editor : function() {
-
-
                 tinymce.init({
                     selector: '#mytextarea',
+                    auto_focus : "mytextarea",
                     height: '100%',
                     resize: false,
                     branding: false,
@@ -126,11 +147,22 @@
                     //toolbar: 'table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol'
                     toolbar: 'save | undo redo | styleselect | forecolor | bold italic | alignleft aligncenter alignright alignjustify | outdent indent | link image | code',
                     save_oncancelcallback: function () { console.log('Save canceled'); },
-                    save_onsavecallback: function () { 
-                        var myContent = tinymce.get("mytextarea").getContent();
-                        console.log('Saved: [%s]', myContent); 
-                    }
+                    save_onsavecallback: p.do_ajax_save
                 });
+            },
+            do_ajax_save : function() {
+                var myContent = tinymce.get("mytextarea").getContent();
+                console.log('Saved: [%s]', myContent); 
+
+                $.ajax({
+                    method: "POST",
+                    url: "/api/note/save",
+                    dataType: "json",
+                    data: { "content": JSON.stringify(myContent), "doc_id" : p.note_doc_id }
+                }).done(function(result) {
+                    console.log("Save %s", result);
+                });
+
             },
 
             do_ajax_search : function(search_text) {

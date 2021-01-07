@@ -500,3 +500,56 @@ class hci_db():
         
         logging.info("class=hci_db method=add_project event=end")
         return project_id
+
+
+class note_db():
+    def __init__(self):
+        logging.info("class=note_db method=__init__ event=begin")
+        self.client = get_mongodb_client('hci')
+        self.db = self.client['hci']
+        logging.info("class=note_db method=__init__ event=end")
+    
+    def notes_exists(self):
+        notes = self.db['note']
+        doc_count = notes.count_documents()
+        return doc_count > 0
+
+    def tag_exist(self, name):
+        tags = self.db['tag']
+        logging.info("Finding {0}".format(name))
+        doc_count = tags.count_documents({"name": name })
+        logging.info("Finding {0} - count".format(name, doc_count))
+        return doc_count > 0
+
+    def find_tags(self, name):
+        tags = self.db['tag']
+        docs = tags.find({"name": name } )
+        return docs
+
+    def add_tag(self, name):
+        tags = self.db['tag']
+        
+        tag = {
+            "name"          : name,
+            "cre_dt"        : datetime.utcnow(),
+            "upd_dt"        : datetime.utcnow()
+        }
+
+        if not self.tag_exist(name):
+            logging.info("proj not exist, insert")
+            doc_id = tags.insert_one(tag).inserted_id
+        else:
+            logging.info("exist, do nothing")
+            doc_id = None
+        return doc_id
+
+    def add_note(self, title, content):
+        notes = self.db['tag']
+        note = {
+            "title"         : title,
+            "content"       : content,
+            "cre_dt"        : datetime.utcnow(),
+            "upd_dt"        : datetime.utcnow()
+        }
+        doc_id = notes.insert_one(note).inserted_id
+        return doc_id
