@@ -152,7 +152,7 @@
             },
             do_ajax_save : function() {
                 var myContent = tinymce.get("mytextarea").getContent();
-                console.log('Saved: [%s]', myContent); 
+                console.log('Saved [%s]: [%s]', p.note_doc_id, myContent); 
 
                 $.ajax({
                     method: "POST",
@@ -160,9 +160,9 @@
                     dataType: "json",
                     data: { "content": JSON.stringify(myContent), "doc_id" : p.note_doc_id }
                 }).done(function(result) {
-                    console.log("Save %s", result);
+                    p.note_doc_id = result.doc_id;
+                    console.log("Saved.")
                 });
-
             },
 
             do_ajax_search : function(search_text) {

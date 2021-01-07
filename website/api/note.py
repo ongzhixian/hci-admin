@@ -82,8 +82,16 @@ def api_note_save(errorMessages=None):
 
     if content is not None:
         db = note_db()
-        db.add_note(title, content)
-    
+
+        if len(doc_id) <= 0:
+            doc_id = db.add_note(title, content)
+        else:
+            doc_id = db.update_note(doc_id, title, content)
+
+        return json.dumps({
+            "doc_id" : str(doc_id)
+        })
+
     return "OK"
 
 

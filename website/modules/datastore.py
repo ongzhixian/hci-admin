@@ -544,12 +544,33 @@ class note_db():
         return doc_id
 
     def add_note(self, title, content):
-        notes = self.db['tag']
+        logging.info("add_note")
+
+        notes = self.db['note']
         note = {
             "title"         : title,
             "content"       : content,
             "cre_dt"        : datetime.utcnow(),
             "upd_dt"        : datetime.utcnow()
         }
+
         doc_id = notes.insert_one(note).inserted_id
+
+        logging.info("doc_id {0}".format(doc_id))
+
         return doc_id
+
+    def update_note(self, doc_id, title, content):
+        logging.info("update_note")
+
+        notes = self.db['note']
+        doc = notes.find_one({"_id": ObjectId(doc_id)})
+
+        if doc is not None:
+            update_status = notes.update_one({"_id": ObjectId(doc_id)}, { "$set": {
+                "title" : title,
+                "content" : content 
+            }})
+            return doc_id if update_status.modified_count > 0 else None
+
+        return None
