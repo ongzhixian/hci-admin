@@ -4,6 +4,9 @@
 ################################################################################
 
 import json
+
+from bson import ObjectId
+
 import logging
 
 from html.parser import HTMLParser
@@ -31,10 +34,15 @@ def api_note_search(errorMessages=None):
     search_term = None
 
     if 'search_text' in request.form:
-        search_term = request.form['search_text']
-
+        search_term = request.form['search_text'].strip()
+    
+    
     if search_term is not None:
         db = note_db()
+        if search_term in ['list', 'index']:
+            results = db.get_notes()
+            return json.dumps(results, default=str)
+
         tags = db.find_tags(search_term)
         if tags.count() <= 0:
             db.add_tag(search_term)
@@ -114,3 +122,14 @@ class HeadingParser(HTMLParser):		    #create a subclass of HTMLParser which wil
     def handle_endtag(self, tag):				
         if tag =="h1":						
             self.is_h1_tag = False
+
+
+class MongoDbJson(json.JSONEncoder):
+    #Usage
+    # JSONEncoder().encode(analytics)
+    # json.encode(analytics, cls=MongoDbJson)
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return json.MongoDbJson.default(self, o)
+

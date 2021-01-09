@@ -509,10 +509,10 @@ class note_db():
         self.db = self.client['hci']
         logging.info("class=note_db method=__init__ event=end")
     
-    def notes_exists(self):
-        notes = self.db['note']
-        doc_count = notes.count_documents()
-        return doc_count > 0
+
+    ########################################
+    # Tag-related
+    ########################################
 
     def tag_exist(self, name):
         tags = self.db['tag']
@@ -542,6 +542,24 @@ class note_db():
             logging.info("exist, do nothing")
             doc_id = None
         return doc_id
+
+    ########################################
+    # Note-related
+    ########################################
+
+    def get_notes(self, page=1, page_size=25):
+        notes = self.db['note']
+        skip_page = 0
+        if page > 0:
+            skip_page = page - 1
+        result = list(notes.find({}, {"content":0}).skip(skip_page).limit(page_size))
+        return result 
+
+    def notes_exists(self):
+        notes = self.db['note']
+        doc_count = notes.count_documents()
+        return doc_count > 0
+
 
     def add_note(self, title, content):
         logging.info("add_note")
