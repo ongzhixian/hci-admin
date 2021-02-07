@@ -9,7 +9,7 @@ runtime: python37
 #version: 1-0-0
 
 env_variables:
-  GOOGLE_APPLICATION_CREDENTIALS: "C:\Users\zong\Documents\PowerShell\hci-admin-6ec8912b4124.json"
+  GOOGLE_APPLICATION_CREDENTIALS: "C:/Users/zong/Documents/PowerShell/hci-admin-6ec8912b4124.json"
 
 handlers:
 
